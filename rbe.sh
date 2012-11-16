@@ -58,11 +58,11 @@ error()
 
 tftype=2
 runnr=1
-numebs=20
+numebs=10
 ru=100
 mi=1200
 rd=50
-url="http://localhost/tpcw/"
+url="http://localhost:8080/tpcw/"
 
 # The option parser, change it as needed
 # In this example -f and -h take no arguments -l takes an argument
@@ -88,4 +88,4 @@ filename="run"$runnr"_e"$numebs"_"$datum".m"
 
 fact="rbe.EBTPCW"$tftype"Factory"
 
-java rbe.RBE -EB $fact $numebs -OUT $filename -RU $ru -MI $mi -RD $rd -WWW $url -ITEM 1000 -CUST 288000 -GETIM false
+java rbe.RBE -EB $fact $numebs -OUT $filename -RU $ru -MI $mi -RD $rd -WWW $url -ITEM 1000 -CUST 28800 -GETIM false
