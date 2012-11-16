@@ -1,0 +1,218 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- 
+	Documentation for the distribution of the TPC-W Java implementation.
+	Copyright 2003 by Jan Kiefer.
+	
+	This file is distributed "as is". It comes with no warranty and the 
+	author takes no responsibility for the consequences of its use.
+	
+	Usage, distribution and modification is allowed to everyone, as long 
+	as reference to the author(s) is given and this license note is included.
+-->
+
+<html>
+<head>
+<title>TPC-W Java Implementation</title>
+<link rel="stylesheet" type="text/css" href="./page.css">
+</head>
+<body>
+
+<table width="100%" cellpadding="10" cellspacing="0">
+  <tr>
+    <td colspan="2" class="mainhead" align="center"><h1>TPC-W Java Implementation</h1></td>
+  </tr>
+  <tr>
+    <td class="mencell">
+      <ul>
+        <li><a href="./index.html">Introduction</a></li>
+      </ul>
+      <ul>
+        <li><a href="./install.html">Installation</a></li>
+      </ul>
+      <ul>
+        <li><a href="./use.html">Usage</a></li>
+      </ul>
+      <ul>
+        <li><a href="./doc.html">Implementation</a></li>
+      </ul>
+      <ul>
+        <li><a href="./cred.html">Credits</a></li>
+      </ul>
+      <ul>
+        <li><a href="./links.html">Links</a></li>
+      </ul>
+    </td>
+    <td width="85%" class="texttabcell">
+      <h2>Installation</h2>
+      <table cellpadding="5" cellspacing="0" width="100%" height="100%">
+        <tr>
+          <td class="headcell" width="100%">Overview</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+            Here is a quick overview of the installation process:
+            <ol>
+              <li>Make sure the requirements are fullfilled.</li>
+              <li>Change the settings in <code><b>main.properties</b></code> and <code><b>tpcw.properties</b></code> according to your needs. Depending on your DBMS you'll have to make or change a sql property file.</li>
+              <li>Call Ant with the desired task, e.g. <code><b>dist</b></code> to make evereything you need or <code><b>inst</b></code> to additionally install the WAR file.</li>
+              <li>Add the database and the user to your DBMS.</li>
+              <li>Generate the database content and the images, either with the task <code><b>gendb</b></code> or by executing <code><b>TPCW_Populate.class</b></code> in the <code><b>dist</b></code>  directory manually.</li>
+              <li>Add the webapp to your servlet container.</li>
+              <li>For a javadoc of the servlet and RBE API, use the task <code><b>docs</b></code>.</li>
+            </ol>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="headcell" width="100%">Requirements</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+            This distribution requires an installation of:
+            <ul>
+              <li>a Java SDK from <a href="http://java.sun.com/">Sun</a> or any other source (<a href="http://www.ibm.com/java/jdk/">IBM</a>, <a href="http://www.blackdown.org/">Blackdown</a>, etc.). Classpath and JAVA_Home have to be set properly.</li>
+              <li><a href="http://ant.apache.org/">Apache Ant</a> of course.</li>
+              <li>a database and the jdbc driver</li>
+              <li>an appserver</li>
+              <li>for image generation: gcc, make and Perl.</li>
+              <li>for image generation on a MS Windows machine it would be a good idea to use <a href="http://www.cygwin.com/">Cygwin</a>.</li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td class="headcell" width="100%">Settings</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+            Several properties have to be adjusted and some options can be changed. In the file <code><b>main.properties</b></code> locations and paths have to be set properly, in <code><b>tpcw.properties</b></code> the settings for JDBC and some TPC-W specific options have to be adjusted. There is also a file with all SQL statements, one with the original ones (<code>sql.properties</code>) and one with MySQL compatible ones (<code>sql-mysql.properties</code>). If you need different statements you can make a file of your own, based on one of the two.
+          <h4>main.properties</h4>
+            <ul>
+            <li>            
+              cpServ:<br>
+              Path to your servlet.jar (e.g. <code>/usr/share/java/servlet-2.3.jar</code>).
+            </li>
+            <li>
+              cpJDBC:<br>
+              Location of your JDBC driver (e.g. <code>/usr/share/java/mysql-connector-java-3.0.6-stable-bin.jar</code>).
+            </li>
+            <li>
+              webappDir:<br>
+              Path where the webapp should be put (e.g. <code>/var/lib/tomcat4/webapps/tpcw</code>).
+            </li>
+            <li>
+              perlPath:<br>
+              Location of the Perl interpreter (e.g. <code>/usr/bin/perl</code>).
+            </li>
+            <li>
+              imagesDir:<br>
+              Path for the Images, should be <code>${webappDir}/Images</code>.
+            </li>
+            <li>
+              sqlFilter:<br>
+              File with SQL statements used in the servlets (e.g. <code>sql-mysql.properties</code>).
+            </li>
+            <li>
+              dbname:<br>
+              Name of DBMS to determine the right <code>TPCW_Database.java</code> to use. For the original one use <code>std</code> here, for McKoi use <code>mckoi</code>. 
+            </li>
+          </ul>
+          <h4>tpcw.properties</h4>
+        <ul>  
+          <li>jdbc.driver:<br>
+          Name of the JDBC driver (e.g. <code>com.mysql.jdbc.Driver</code>).</li>                          
+          <li>jdbc.path:<br>
+          JDBC path for the database (e.g. <nobr><code>jdbc:mysql://127.0.0.1/tpcw?user=tpcw&amp;password=tpcw</code></nobr>).</li>
+          <li>jdbc.connPoolMax:<br>
+          Maximum number of simultanous connections for the connection pool.</li>
+          <li>sql.bigCharType:<br>
+          Data type for long varchars (e.g. <code>varchar(500)</code> or <code>tinyblob</code>).</li>
+          <li>num.item:<br>
+          Number of items in the bookstore.</li>
+          <li>num.eb:<br>
+          Maximum number of emulated browsers.</li>
+          <li>sessionIdString:<br>
+          The string for URL encoding used by your servlet container (e.g. <code>jsessionid=</code> for Tomcat).</li>
+          <li>standardUrl:<br>
+          Standard URL used in RBE (e.g. <code>http://localhost:8080</code>).</li>
+          <li>servletUrlPath:<br>
+          Path to the servlets on the server, as they are mapped in the web.xml it should be <code>/</code>.</li>
+          <li>tpcwUrlPath:<br>
+          Path to the tpcw application on the web server (e.g. <code>/tpcw</code>).</li>
+        </ul>
+        <h4>sql.properties</h4>
+        This file contains all the SQL statements used in the <code><b>TPCW_Database</b></code> servlet. Only needs to be changed, if your DBMS uses different statements. In <code><b>sql-mysql.properties</b></code> are the correct statements for MySQL, created using the tips and tricks from <a href="http://www-2.cs.cmu.edu/~manjhi/tpcw.html">Amit Manjhi's page</a>.
+        <h4>TPCW_Database.xy.java</h4>
+        Due to the restrictions of some DBMS it might be necessary to change the database access class. Included is the original one (<code>TPCW_Database.std.java</code>) and one for McKoi (<code>TPCW_Database.mckoi.java</code>). For other DBMS you will have to make one of your own, based on the original one and set <code>dbname</code> in <code>main.properties</code> correctly.
+          </td>
+        </tr>
+
+        <tr>
+          <td class="headcell" width="100%">Tasks</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+          Here is a description of the main tasks for Ant. If you use Cygwin and get an error message, you should try calling <code><b>ant.bat</b></code> instead of just <code><b>ant</b></code>.
+          <h4>mksrc</h4>
+          Prepares the source code, mainly replacing filter tokens with your settings from the property files. The source code will be placed in <code><b>src</b></code> diectory.
+          <h4>build</h4>
+          Builds the servlets, RBE and the populate class, they will be put in directory <code><b>build</b></code>.
+          <h4>dist</h4>
+          Generates a WAR file with the servlets and a web.xml. This, the RBE and the files for database &amp; image generation will be placed along with some text files in the <code><b>dist</b></code> directory.
+          <h4>docs</h4>
+          Runs javadoc to generate documentation of the servlet and RBE API in the <code><b>dist</b></code> directory.
+          <h4>inst</h4>
+          Copies <code><b>tpcw.war</b></code> in the configured webapp directory (existing one will be deleted).
+          <h4>gendb</h4>
+          Calls Java to execute <code><b>TPCW_populate.class</b></code> for generating the database content.
+          <h4>genimg</h4>
+          Copies the static image files to the image directory. Calls make to compile the image generation utility. Calls Perl to run the image generation script.
+          <h4>clean</h4>
+          Deletes everything created with ant tasks (directories <code>src, build, dist</code>) except the installed <code><b>tpcw.war</b></code>.    
+          </td>
+        </tr>
+        <tr>
+          <td class="headcell" width="100%">Web Application Registration</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+          <p>Final step is the registration of <code><b>tpcw.war</b></code> at the application server. As this is server specific, you have to look at the documentation of your server for further information. The following example shows how it could be done using Tomcat.</p>
+          Assuming you have placed the application in <code><b>&lt;your webapp dir&gt;/tpcw/tpcw.war</b></code>, you will just have to add a <code><b>Context</b></code> nested in a <code><b>Host</b></code> element in the Tomcat <code><b>server.xml</b></code> like this:
+          <p>
+<pre>
+&lt;Context path="/tpcw" docBase="/tpcw/tpcw.war" debug="0"
+          reloadable="false" crossContext="true" 
+          privileged="false"&gt;
+    &lt;Logger className="org.apache.catalina.logger.FileLogger"
+              prefix="localhost_tpcw_log." suffix=".txt" verbosity="0"         
+              timestamp="true"/&gt;
+&lt;/Context&gt; 
+          
+</pre>          </p>      
+          </td>
+        </tr>
+        <tr>
+          <td class="headcell" width="100%">Additional Tips &amp; Tricks</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+          <h4>Database Generation without Ant</h4>
+          This step requires having task <code><b>dist</b></code> or <code><b>inst</b></code> already executed.<br>
+          In the <code><b>dist</b></code> directory are the necessary files to generate the database content. So you just have to change to this directory and call <code><b>java TPCW_Populate</b></code> for database population.
+          <h4>API Javadoc</h4>
+          For a documentation of the RBE and servlet API just execute the <code><b>docs</b></code> task, it will then be placed in  <code><b>dist/doc/api</b></code>.
+          <h4>McKoi</h4>
+          It is useful to uncomment <code>transaction_error_on_dirty_select=disabled</code> in <code>db.conf</code>, otherwise you will get lots of exceptions because of dirty reads on modified tables.
+          <h4></h4>
+          <h4></h4>
+          </td>
+        </tr>
+          
+          
+      </table>
+      
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

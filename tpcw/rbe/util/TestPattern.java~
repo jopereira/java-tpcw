@@ -1,0 +1,103 @@
+/*-------------------------------------------------------------------------
+ * rbe.util.TestPattern
+ * Timothy Heil
+ * 10/5/99
+ *
+ * Testing StringPattern classes.
+ *------------------------------------------------------------------------*/
+
+package rbe.util;
+
+import java.util.Random;
+
+public class TestPattern {
+  public static void main(String [] args) {
+    CharSetStrPattern sp = new CharSetStrPattern();
+
+    int i,c,c2,j;
+    boolean [] buf = new boolean[256];
+    Random r = new Random(1);
+
+    for (i=0;i<10000;i++) {
+      c = Math.abs(r.nextInt()) % 256;
+      sp.set((char) c);
+      buf[c] = true;
+
+      testBuf(buf, sp);
+
+      c = Math.abs(r.nextInt()) %256;
+      sp.clear((char) c);
+      buf[c] = false;
+
+      testBuf(buf, sp);
+    }
+
+    System.out.println("Testing ranges.");
+    for (i=0;i<10000;i++) {
+      c = Math.abs(r.nextInt()) % 256;
+      c2 = (Math.abs(r.nextInt()) % (256-c))+c;
+      // System.out.println("Set " + c + " to " + c2);
+      sp.set((char) c, (char) c2);
+      for (j=c;j<=c2;j++) {
+	buf[j] = true;
+      }
+      testBuf(buf, sp);
+
+      c = Math.abs(r.nextInt()) % 256;
+      c2 = (Math.abs(r.nextInt()) % (256-c))+c;
+      // System.out.println("Clear " + c + " to " + c2);
+      sp.clear((char) c, (char) c2);
+      for (j=c;j<=c2;j++) {
+	buf[j] = false;
+      }
+
+      testBuf(buf, sp);
+    }
+
+
+    StringPattern p = new CharStrPattern(args[0].charAt(0));
+    test(p,args[1]);
+
+    if (args[0].length()>2) {
+      p = new CharRangeStrPattern(args[0].charAt(0), args[0].charAt(1));
+      test(p,args[1]);
+    }
+
+    p = new StrStrPattern(args[0]);
+    test(p,args[1]);
+
+    sp.clear((char) 0, (char) 255);
+    sp.set(args[0]);
+    test(sp,args[1]);
+  }
+
+  private static void test(StringPattern p, String s) 
+  {
+    System.out.println("find " + p.find(s) + " end " + p.end());
+    System.out.println("find(5) " + p.find(s, 5) + " end " + p.end());
+    System.out.println("find(5,10) " + p.find(s, 5, 10) + 
+		       " end " + p.end());
+
+    System.out.println("match " + p.match(s) + " end " + p.end());
+    System.out.println("match(5) " + p.match(s, 5) + " end " + p.end());
+    System.out.println("match(5,10) " + p.match(s, 5, 10) + 
+		       " end " + p.end());
+    System.out.println("match(5,5) " + p.match(s, 5, 5) + 
+		       " end " + p.end());
+    System.out.println("matchWithin(5,10) " + p.matchWithin(s, 5, 10) + 
+		       " end " + p.end());
+  }
+
+  private static void testBuf(boolean [] buf, CharSetStrPattern sp)
+  {
+    int j;
+
+    for (j=0;j<256;j++) {
+      if (buf[j]!=sp.get((char) j)) {
+	System.out.println("Unmatch on " + j);
+	System.out.println("buf is " + buf[j] + " sp is " + sp.get((char) j));
+	System.exit(-1);
+      }
+    }
+  }
+}

@@ -1,0 +1,220 @@
+<?xml version="1.0"?>
+
+<!-- 
+	build.xml for Ant to build and install the TPC-W Java implementation.
+	Copyright 2003 by Jan Kiefer.
+	
+	This file is distributed "as is". It comes with no warranty and the 
+	author takes no responsibility for the consequences of its use.
+	
+	Usage, distribution and modification is allowed to everyone, as long 
+	as reference to the author(s) is given and this license note is included.
+-->
+
+<project name="TPC-W Servlets" default="build" basedir=".">
+
+	<!-- Set needed properties -->
+  	<target name="init">
+    		<tstamp/>
+
+		<!-- 	This file contains important properties 
+			you might want to change according to your needs -->
+		<property file="main.properties"/>
+
+		<!-- 	Filter file for some settings needed, 
+			change the contents according to your needs -->
+		<property name="tpcwFilter" value="tpcw.properties"/>
+
+		<!-- Directory structure used, this doesn't have to be changed -->
+		<!-- 	./src/servlets
+			./src/populate
+			./build/servlets
+			./build/populate
+			./dist/doc 
+			./dist/doc/api -->
+		<property name="servDir" value="servlets"/>
+		<property name="dbDir" value="populate"/>
+		<property name="rbeDir" value="rbe"/>
+		<property name="tpcwDir" value="tpcw"/>
+		<property name="imagesGenDir" value="../${tpcwDir}/ImgGen"/>
+		
+		<property name="srcDir" value="src"/>
+		<property name="buildDir" value="build"/>
+		<property name="distDir" value="dist"/>
+		
+		<property name="srcServDir" value="${srcDir}/${servDir}"/>
+		<property name="srcDbDir" value="${srcDir}/${dbDir}"/>
+		<property name="srcRbeDir" value="${srcDir}/${rbeDir}"/>
+		<property name="buildServDir" value="${buildDir}/${servDir}"/>
+		<property name="buildDbDir" value="${buildDir}/${dbDir}"/>
+		<property name="buildRbeDir" value="${buildDir}/${rbeDir}"/>
+		
+		<property name="docDir" value="${distDir}/doc"/>
+  	</target>	
+
+	<!-- Prepare directories -->
+  	<target name="prepare" depends="init">
+    		<mkdir dir="${srcServDir}" />
+    		<mkdir dir="${srcDbDir}" />
+		<mkdir dir="${srcRbeDir}" />
+    		<mkdir dir="${buildServDir}" />
+    		<mkdir dir="${buildDbDir}" />
+		<mkdir dir="${buildRbeDir}" />
+    		<mkdir dir="${distDir}" />
+		<mkdir dir="${docDir}"/>
+  	</target>
+
+	<!-- Copy source files and replace tokens according to the filter files -->
+	<target name="mksrc" depends="prepare" description="Replace tokens in src with values from properties in filter files.">
+		<filter filtersFile="${tpcwFilter}"/>
+		<filter filtersFile="${sqlFilter}"/>
+		<copy todir="${srcServDir}" filtering="on" preservelastmodified="true">
+			<fileset dir="${tpcwDir}/${servDir}" casesensitive="yes">
+  				<include name="**/*.java"/>
+  			</fileset>
+		</copy>
+		<copy tofile="${srcServDir}/TPCW_Database.java" filtering="on" preservelastmodified="true">
+			<fileset dir="${basedir}" casesensitive="yes">
+  				<include name="TPCW_Database.${dbName}.java"/>
+  			</fileset>
+		</copy>
+		<copy todir="${srcRbeDir}" filtering="on" preservelastmodified="true">
+			<fileset dir="${tpcwDir}/${rbeDir}" casesensitive="yes">
+  				<include name="**/*.java"/>
+  			</fileset>
+		</copy>
+		<filter token="images.path" value="${imagesDir}"/>
+		<filter token="imagesGen.path" value="${imagesGenDir}"/>
+		<copy todir="${srcDbDir}" filtering="on" preservelastmodified="true">
+			<fileset dir="${tpcwDir}/${dbDir}" casesensitive="yes">
+  				<include name="**/*.java"/>
+  				<include name="populate_images"/>
+  			</fileset>
+		</copy>
+	</target>
+
+	<!-- Build the class files for the servlets and the database populate class -->
+  	<target name="build" depends="mksrc" description="Build the *.class files from source.">
+    		<javac srcdir="${srcServDir}" destdir="${buildServDir}">
+    			<classpath>
+      				<pathelement path="${classpath}"/>
+      				<pathelement path="${srcServDir}"/>
+      				<pathelement location="${cpServ}"/>
+    			</classpath>
+    		</javac>
+    		<javac srcdir="${srcDir}" destdir="${buildRbeDir}" includes="rbe/**">
+    			<classpath>
+      				<pathelement path="${classpath}"/>
+      				<pathelement path="${srcRbeDir}"/>
+      				<pathelement location="${cpServ}"/>
+    			</classpath>
+    		</javac>
+    		<javac srcdir="${srcDbDir}" destdir="${buildDbDir}">
+    			<classpath>
+      				<pathelement path="${classpath}"/>
+      				<pathelement path="${srcDbDir}"/>
+      				<pathelement location="${cpServ}"/>
+    			</classpath>
+    		</javac>
+  	</target>
+  
+	<!-- Documentation -->
+  	<target name="docs" depends="mksrc" description="Build the javadoc for the servlets.">
+		<javadoc destdir="${docDir}/api">
+    			<classpath>
+      				<pathelement path="${classpath}"/>
+      				<pathelement path="${srcServDir}"/>
+      				<pathelement path="${srcRbeDir}"/>
+      				<pathelement location="${cpServ}"/>
+    			</classpath>
+    			<fileset dir="${srcServDir}">
+      				<include name="**/*.java" />
+			</fileset>
+    			<fileset dir="${srcRbeDir}">
+      				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+  	</target>
+  
+	<!-- Distribution -->
+	<target name="checkDist">
+		<uptodate property="war.notNeeded" targetfile="${distDir}/tpcw.war">
+  			<srcfiles dir="${buildServDir}" includes="**/*.class"/>
+  		</uptodate>
+  		<uptodate property="rbe.notNeeded">
+  			<srcfiles dir="${srcRbeDir}" includes="**/*.java"/>
+  			<mapper type="glob" from="*.java" to="${basedir}${file.separator}${distDir}${file.separator}${rbeDir}${file.separator}*.class"/>
+  		</uptodate>
+  		<uptodate property="db.notNeeded" srcfile="${buildDbDir}/TPCW_populate.class" targetfile="${buildDbDir}/TPCW_populate.class"/>
+  		<uptodate property="dbImages.notNeeded" srcfile="${srcDbDir}/populate_images" targetfile="${distDir}/populate_images"/>
+		<condition property="dist.notNeeded">
+    			<and>
+      				<isset property="war.notNeeded"/>
+      				<isset property="rbe.notNeeded"/>
+      				<isset property="db.notNeeded"/>
+      				<isset property="dbImages.notNeeded"/>
+    			</and>
+  		</condition>
+  	</target>
+    	<target name="dist" depends="build, checkDist" unless="dist.notNeeded" description="Build the *.war file from *.class files.">
+		<war destfile="${distDir}/tpcw.war" webxml="tpcw.xml">
+			<classes dir="${buildServDir}"/>	
+		</war>
+		<copy todir="${distDir}" preservelastmodified="true">
+			<fileset dir="${buildDbDir}" casesensitive="yes">
+  				<include name="**/*.class"/>
+  				<include name="**/populate_images"/>
+  			</fileset>
+  			<fileset dir="${srcDbDir}" casesensitive="yes">
+  				<include name="populate_images"/>
+  			</fileset>
+  			<fileset dir="${buildRbeDir}" casesensitive="yes">
+  				<include name="**/*.class"/>
+  			</fileset>
+		</copy>
+		<copy file="${tpcwDir}/${rbeDir}/README" tofile="${docDir}/readme-rbe.txt" preservelastmodified="true"/>
+		<copy file="${tpcwDir}/README" tofile="${docDir}/readme-tpcw.txt" preservelastmodified="true"/>
+		<copy file="${tpcwDir}/runtpcw" tofile="${distDir}/runtpcw" preservelastmodified="true"/>
+		<copy file="${basedir}/rbe.sh" tofile="${distDir}/rbe.sh" preservelastmodified="true"/>
+		<copy file="${tpcwDir}/COPYRIGHT" tofile="${distDir}/copyright" preservelastmodified="true"/>
+  	</target>
+
+	<!-- Installation -->
+	<target name="inst" depends="dist" description="Copy war file to desired directory.">
+		<delete file="${webappDir}/tpcw.war"/>
+		<copy file="${distDir}/tpcw.war" todir="${webappDir}"/>
+	</target>
+  
+	<!-- DB generation -->
+	<target name="gendb" depends="dist" description="Generate Database data.">
+		<java classname="TPCW_Populate" fork="true">
+         		<classpath>
+      				<pathelement path="${classpath}"/>
+      				<pathelement path="${srcDbDir}"/>
+      				<pathelement path="${distDir}"/>
+      				<pathelement location="${cpJDBC}"/>
+         		</classpath>
+       		</java>
+	</target>
+	
+	<!-- Image generation -->
+	<target name="genimg" depends="dist" description="Generate the images for the items.">
+		<copy todir="${imagesDir}">
+			<fileset dir="${tpcwDir}/images" casesensitive="yes">
+  				<include name="**/*.gif"/>
+  			</fileset>
+		</copy>		
+		<exec dir="${tpcwDir}/ImgGen/ImgFiles" executable="make" output="make_img-gen.txt" failonerror="true"/>
+		<exec dir="${distDir}" executable="${perlPath}" output="populate_images.txt" failonerror="true">
+  			<arg line="populate_images"/>
+		</exec>
+	</target>
+	
+	<!-- Clean Up -->
+	<target name="clean" depends="init" description="Remove all generated files and directories (except installed *.war).">
+    		<delete dir="${srcDir}" />
+    		<delete dir="${buildDir}" />
+    		<delete dir="${distDir}" />
+  	</target>  
+	
+</project>

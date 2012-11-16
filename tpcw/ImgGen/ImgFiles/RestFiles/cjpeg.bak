@@ -1,0 +1,110 @@
+
+#include "cdjpeg.h"		/* Common decls for cjpeg/djpeg applications */
+#include "jversion.h"		/* for version message */
+#include <math.h>
+#include <time.h>
+
+
+int main (int argc, char **argv)
+{
+	struct jpeg_compress_struct cinfo;
+	struct jpeg_error_mgr jerr;
+	int k, dim, i;
+	FILE * outfile;
+	char *row_pointer;
+	
+	if(argc != 3) {
+		printf("Usage: %s <size of image in k> <image name>.jpg\n", argv[0]);
+		exit(0);
+	}
+	
+	k = atoi(argv[1]);
+	if(k<0)
+		k=1;
+	
+	/* Create output image. */
+	dim = (int)sqrt( ((k*1024)-635)/2 );
+	printf("size ~= %d bytes, dimension = %d\n", k*1024, dim);
+
+	row_pointer = malloc(dim*3*sizeof(char));
+
+	/* Initialize the JPEG compression object with default error handling. */
+	cinfo.err = jpeg_std_error(&jerr);
+	jpeg_create_compress(&cinfo);
+	
+	/* Specify data destination for compression */
+	if((outfile = fopen(argv[2], "wb")) == NULL) {
+		printf("Can't open file...\n");
+		exit(1);
+	}
+	jpeg_stdio_dest(&cinfo, outfile);
+	
+	/* Initialize JPEG parameters.
+	* Much of this may be overridden later.
+	* In particular, we don't yet know the input file's color space,
+	* but we need to provide some value for jpeg_set_defaults() to work.
+	*/
+	
+	cinfo.in_color_space = JCS_RGB; /* arbitrary guess */
+	cinfo.image_width = dim;
+	cinfo.image_height = dim;
+	cinfo.input_components = 3;
+	jpeg_set_defaults(&cinfo);
+	jpeg_set_quality(&cinfo, 9999, TRUE);
+    srand( (unsigned)time( NULL ) );
+
+
+	/* Start compressor */
+	jpeg_start_compress(&cinfo, TRUE);
+	/* Process data */
+	while (cinfo.next_scanline < cinfo.image_height) {
+		/* randomize the dots */
+		int position;
+		for(i=0; i<dim; i++) {
+			position = i * 3;
+			row_pointer[position] = (char)rand()%256;
+			row_pointer[position+1] = (char)rand()%256;
+			row_pointer[position+2] = (char)rand()%256;
+		}
+
+		(void) jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+	}
+	
+	gdImageChar();
+
+	/* Finish compression and release memory */
+	jpeg_finish_compress(&cinfo);
+	jpeg_destroy_compress(&cinfo);
+	
+	if (outfile != stdout)
+		fclose(outfile);
+	
+	/* All done. */
+	exit(jerr.num_warnings ? EXIT_WARNING : EXIT_SUCCESS);
+	return 0;			/* suppress no-return-value warnings */
+}
+
+
+void gdImageChar(gdImagePtr im, gdFontPtr f, int x, int y, 
+	int c, int color)
+{
+	int cx, cy;
+	int px, py;
+	int fline;
+	cx = 0;
+	cy = 0;
+	if ((c < f->offset) || (c >= (f->offset + f->nchars))) {
+		return;
+	}
+	fline = (c - f->offset) * f->h * f->w;
+	for (py = y; (py < (y + f->h)); py++) {
+		for (px = x; (px < (x + f->w)); px++) {
+			if (f->data[fline + cy * f->w + cx]) {
+				gdImageSetPixel(im, px, py, color);	
+			}
+			cx++;
+		}
+		cx = 0;
+		cy++;
+	}
+}

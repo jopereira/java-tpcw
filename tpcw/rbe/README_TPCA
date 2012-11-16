@@ -1,0 +1,30 @@
+README_TPCA
+
+This file describes briefly how to run TPC-A using the RBE.
+
+The file, "README," in this directory provides more general
+information about using the RBE.  Look there for more details.
+
+Example command line (all one line, of course):
+
+java rbe.RBE -EB rbe.EBTPCBFactory 1 1 1 1 1 1 1 -5 5 -TT 0.01 
+   -OUT tpcb.m -RU 1 -MI 5 -RD 1
+
+The general format is:
+
+java rbe.RBE -EB rbe.EBTPCBFactory <num_cl> <minBID> <maxBID> <minTID> 
+	<maxTID> <minAID> <maxAID> <minDelta> <maxDelta> 
+   -TT  <think>
+   -OUT <output_file> -RU <ramp_up> -MI <measure> -RD <ramp_down>
+
+num_cl:              The number of clients, emulated browsers, or connections.
+minBID, maxBID:      The range of random branch IDs produced.
+minTID, maxTID:      The range of random account IDs produced.
+minDelta, maxDelta:  The range of account deltas produced.
+think:               EB think times range from 7s to 70s times this value.
+output_file:         An output matlab file (required).
+ramp_up:             Warm-up time before measuring interaction rate.
+measure:             Length of time for measuring performance.
+ramp_down:           Steady-state after measurment interval.
+
+See README for more details about -TT, -OUT, -RU, -MI, and -RD.

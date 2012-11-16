@@ -1,0 +1,15 @@
+body {  background-color: #FFFFFF; margin: 0px 0px 0px 0px; font-family: Verdana, Helvetica, sans-serif; font-size: 90%;}
+
+a:link { color: #4E92D6; }
+a:visited { color: #4E92D6; }
+a:active { color: #96B7D9; }
+a:hover { color: #96B7D9; }
+
+.mainhead { background-color:#004080; color: #96B7D9; }
+.mencell { vertical-align:top; background-color:#004080; color: #96B7D9; padding: 20px 10px 50px 0px; }
+.texttabcell { padding: 10px; }
+.textcell { padding: 20px 0px 20px 5px; }
+.headcell { background-color:#004080; font-weight:bold; color: #FFFFFF; padding: 3px 5px 3px 5px; spacing: 0px; }
+.smallheadcell { background-color:#004080; color: #FFFFFF; padding: 3px 5px 3px 5px; spacing: 0px; }
+
+.imp { color:#DC0000; }

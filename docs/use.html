@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- 
+	Documentation for the distribution of the TPC-W Java implementation.
+	Copyright 2003 by Jan Kiefer.
+	
+	This file is distributed "as is". It comes with no warranty and the 
+	author takes no responsibility for the consequences of its use.
+	
+	Usage, distribution and modification is allowed to everyone, as long 
+	as reference to the author(s) is given and this license note is included.
+-->
+
+<html>
+<head>
+<title>TPC-W Java Implementation</title>
+<link rel="stylesheet" type="text/css" href="./page.css">
+</head>
+<body>
+
+<table width="100%" cellpadding="10" cellspacing="0">
+  <tr>
+    <td colspan="2" class="mainhead" align="center"><h1>TPC-W Java Implementation</h1></td>
+  </tr>
+  <tr>
+    <td class="mencell">
+      <ul>
+        <li><a href="./index.html">Introduction</a></li>
+      </ul>
+      <ul>
+        <li><a href="./install.html">Installation</a></li>
+      </ul>
+      <ul>
+        <li><a href="./use.html">Usage</a></li>
+      </ul>  
+      <ul>
+        <li><a href="./doc.html">Implementation</a></li>
+      </ul>
+      <ul>
+        <li><a href="./cred.html">Credits</a></li>
+      </ul>
+      <ul>
+        <li><a href="./links.html">Links</a></li>
+      </ul>
+    </td>
+    <td width="85%" class="texttabcell">
+      <h2>Usage</h2>
+      <table cellpadding="5" cellspacing="0" width="100%" height="100%">
+        <tr>
+          <td class="headcell" width="100%">Server(s)</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+            After installation there is nothing more to do than start the DBMS and the necessary web / application server(s).
+          </td>
+        </tr>
+        <tr>
+          <td class="headcell" width="100%">RBE</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+<p>Running the benchmark is completely controlled through the RBE. A complete description can be found in <code><b>dist/doc/readme-rbe.txt</b></code>.
+<br>
+The RBE has to be called from the <code><b>dist</b></code> directory with <code><b>java rbe.RBE &lt;options&gt;</b></code>.</p>
+Most important options are (red ones required):
+<ul>
+<li><span class="imp">-EB &lt;class&gt;</span><br>
+Factory class used to create EBs.<br>
+Browsing Mix = rbe.EBTPCW1Factory<br>
+Shopping Mix = rbe.EBTPCW2Factory<br>
+Ordering Mix = rbe.EBTPCW3Factory<br>
+</li>
+<li><span class="imp">-OUT &lt;filename&gt;</span><br>
+Output file: Name of matlab .m output file for results. 
+</li>
+<li>-RU &lt;seconds&gt;<br>
+Ramp-up time: Seconds used to warm-up the simulator (default: 600). 
+</li>
+<li>-MI &lt;seconds&gt;<br>
+Measurement interval: Seconds used for measuring SUT performance (default: 1800).
+</li>
+<li>-RD &lt;seconds&gt;<br>
+Ramp-down time: Seconds of steady-state operation following measurment interval (default: 300).
+</li>
+<li>-CUST &lt;nr&gt;<br>
+Number of customers: Number of customers in the database.  Used to generated random CIDs (default: 1000).
+</li>
+<li>-ITEM &lt;nr&gt;<br>
+Number of items: Number of items in the database. Used to generate random searches (default: 10000).
+</li>
+<li>-WWW &lt;url&gt;<br>
+Base URL: The root URL for the TPC-W pages (default: standardUrl).
+</li>
+</ul>
+The numbers of items and customers have to match the ones used to generate the database (set in <code>tpcw.properties</code>), the number of EBs must be smaller or equal to the one used in the database.
+<p>
+<h4>Example</h4>
+This command line runs the TPC-W Browsing Mix with 30 EB's, output file run1.m, 
+100 seconds of ramp-up time, 1000 seconds of exection, and 100 seconds of ramp
+down time. http://whitelace.ece.wisc.edu:8085/ is used as the web server
+prefix for all requests. There are 10000 items in the database.
+<br>
+<code>java rbe.RBE -EB rbe.EBTPCW1Factory 30 -OUT run1.m -RU 100 -MI 1000 -RD 100 -WWW http://whitelace.ece.wisc.edu:8085/ -CUST 144000 -ITEM 10000</code></p>
+
+<p>Further examples can be found in <code><b>dist/runtpcw</b></code>, the shell script <code><b>rbe.sh</b></code> simplifies running multiple tests.</p>
+          </td>
+        </tr>
+
+      </table>
+      
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

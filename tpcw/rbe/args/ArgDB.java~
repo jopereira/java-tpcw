@@ -1,0 +1,72 @@
+/*-------------------------------------------------------------------------
+ * rbe.args.ArgDB
+ * Timothy Heil
+ * 10/29/99
+ *
+ * Abstract command line argument parsing class.
+ *------------------------------------------------------------------------*/
+
+package rbe.args;
+
+import java.util.Vector;
+
+import java.io.PrintStream;
+
+public class ArgDB {
+  private Vector argsList = new Vector(0);
+
+  public ArgDB() {};
+
+  public void add(Arg a) {
+	 argsList.addElement(a);
+  }
+
+  public final void parse(String [] args)
+		 throws Arg.Exception
+  {
+	 int i;
+	 int a,a2;
+
+	 for (a=0;a<args.length;) {
+		  // System.out.println("ArgDB " + a + " " + args[a]);
+		a2 = a;
+		for (i=0;i<argsList.size();i++) {
+		  a = ((Arg) argsList.elementAt(i)).parse(args, a);
+		  if (a2!=a) break;
+		}
+		if (i==argsList.size()) {
+		  Arg.Exception e = 
+			 new Arg.Exception("Unknown argument (" + args[a] + ").", a);
+		  e.start = a;
+		  throw(e);
+		}
+	 }
+
+	 String req = "";
+	 int numErr = 0;
+
+	 for (i=0;i<argsList.size();i++) {
+		Arg e = ((Arg) argsList.elementAt(i));
+		if (e.required() && !e.set()) {
+		  req = req + e.toString() + "\n";
+		  numErr++;
+		}
+	 }
+
+	 if (numErr>0) {
+		Arg.Exception e = 
+		  new Arg.Exception("" + numErr + " arguments not given.\n" + req, 
+								  args.length-1);
+		e.start = 0;
+		throw e;
+	 }
+  }
+
+  public void print(PrintStream out) {
+	 int a;
+
+	 for (a=0;a<argsList.size();a++) {
+		out.println("% "+ argsList.elementAt(a));
+	 }	 
+  }
+}

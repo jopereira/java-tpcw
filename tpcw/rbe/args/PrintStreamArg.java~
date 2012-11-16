@@ -1,0 +1,48 @@
+/*-------------------------------------------------------------------------
+ * rbe.args.PrintStreamArg
+ * Timothy Heil
+ * 10/29/99
+ *
+ * Abstract command line argument parsing class.
+ *------------------------------------------------------------------------*/
+
+package rbe.args;
+
+import java.io.PrintStream;
+import java.io.FileOutputStream;
+
+public class PrintStreamArg extends Arg {
+  public PrintStream s = null;
+  public String fName = null;
+
+  public PrintStreamArg(String arg, String name, String desc) {
+	 super(arg, name, desc, true, false);
+  }
+
+  public PrintStreamArg(String arg, String name, String desc, ArgDB db) {
+	 super(arg, name, desc, true, false, db);
+  }
+
+  // Customize to parse arguments.
+  protected int parseMatch(String [] args, int a)
+		 throws Arg.Exception
+  {
+	 if (a == args.length) {
+		throw new Arg.Exception("File name missing.", a);
+	 }
+
+	 PrintStream oldS = s;
+	 try {
+		s = new PrintStream(new FileOutputStream(args[a]));
+		fName = args[a];
+		if (oldS!=null) oldS.close();
+	 }
+	 catch (java.io.IOException fnf) {
+		throw new Arg.Exception("Unable to open file " + args[a] + ".", a);
+	 }
+	 
+	 return(a+1);
+  }
+	
+  public String value() { return(fName); }
+}

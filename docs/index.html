@@ -1,0 +1,74 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN">
+<!-- 
+	Documentation for the distribution of the TPC-W Java implementation.
+	Copyright 2003 by Jan Kiefer.
+	
+	This file is distributed "as is". It comes with no warranty and the 
+	author takes no responsibility for the consequences of its use.
+	
+	Usage, distribution and modification is allowed to everyone, as long 
+	as reference to the author(s) is given and this license note is included.
+-->
+
+<html>
+<head>
+<title>TPC-W Java Implementation</title>
+<link rel="stylesheet" type="text/css" href="./page.css">
+</head>
+<body>
+
+<table width="100%" cellpadding="10" cellspacing="0">
+  <tr>
+    <td colspan="2" class="mainhead" align="center"><h1>TPC-W Java Implementation</h1></td>
+  </tr>
+  <tr>
+    <td class="mencell">
+      <ul>
+        <li><a href="./index.html">Introduction</a></li>
+      </ul>
+      <ul>
+        <li><a href="./install.html">Installation</a></li>
+      </ul>
+      <ul>
+        <li><a href="./use.html">Usage</a></li>
+      </ul>  
+      <ul>
+        <li><a href="./doc.html">Implementation</a></li>
+      </ul>
+      <ul>
+        <li><a href="./cred.html">Credits</a></li>
+      </ul>
+      <ul>
+        <li><a href="./links.html">Links</a></li>
+      </ul>
+    </td>
+    <td width="85%" class="texttabcell">
+      <h2>Introduction</h2>
+      <table cellpadding="5" cellspacing="0" width="100%" height="100%">
+        <tr>
+          <td class="headcell" width="100%">About</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+          This is a distribution of the TPC-W Benchmark <a href="http://www.ece.wisc.edu/~pharm/tpcw.shtml">Java Implementation</a> originated of PHARM at the University of Wisconsin - Madison. It includes some changes to make adapting to different databases and servlet containers easier (see <a href="http://www-2.cs.cmu.edu/~manjhi/tpcw.html">Running TPC-W on Tomcat</a>).<br>
+For more background information to understand the TPC-W benchmark have a look at the original <a href="http://www.tpc.org/tpcw/default.asp">TPC-W hompage</a> or other resources listed in the <a href="links.html">links</a>.
+          </td>
+        </tr>
+        <tr>
+          <td class="headcell" width="100%">Description</td>
+        </tr>
+        <tr>
+          <td class="textcell">
+          Basically, this distribution consists of a <code>build.xml</code> for Ant to control building and installing the benchmark. All SQL statements have been extracted into a property file, so they can be changed without messing with the source code. Additionally, all settings for the servlets, RBE and database can be made via properties.<br>
+Database generation and image population can also be started with Ant, but an up-to-date checking is missing.
+          </td>
+        </tr>
+
+      </table>
+      
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>

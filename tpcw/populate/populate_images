@@ -1,0 +1,73 @@
+#!/usr/local/bin/perl
+
+#
+# This is a simple population script that creates the TPC-W image
+# files, making one image and one thumbail per item in the TPCW database.
+# The files are divided into 100 directories.
+#
+# Written by Trey Cain, January 21, 2000.
+# Changed 2003 by Jan Kiefer
+
+use File::Path;
+use File::Copy;
+
+#This should match the number of items stored in the database ITEM table.
+$NUM_ITEMS = @num.item@;
+
+#This should be the destination of where you would like the copies
+#of the image files placed.
+$DEST_DIR='@images.path@';
+#$GEN_CMD='../ImgGen/ImgFiles/tpcwIMG';
+$GEN_CMD='@imagesGen.path@/ImgFiles/tpcwIMG';
+
+#Create the directories that will store the images. 
+#for ($i = 0; $i < $NUM_ITEMS/100; $i++ ) {
+for ($i = 0; $i < 100; $i++ ) {
+   if (-e "$DEST_DIR/img$i" ) {
+     rmtree(["$DEST_DIR/img$i"], 0, 1);
+   }
+   mkdir "$DEST_DIR/img$i", 0755;
+}
+
+
+#Copy the original files into the appropriate directories.
+for ($i = 1; $i <= $NUM_ITEMS; $i++){
+ #Create path for this image (this is bizarre, but I'm keeping
+ #it this way because all of the pointers in the DB expect these
+ #images in a certain place.
+ $dir=$i%1000;
+ $dir = $dir%100;
+ $dir="$DEST_DIR/img$dir";
+ 
+ #Create the item's thumbnail 
+ $thumbnum = ($i % 5) + 1;
+ @args = ($GEN_CMD, "5", "$dir/thumb_$i.gif");
+ system(@args) == 0
+     or die "system @args failed: $?";
+
+ #Create the item's larger image
+ $offset = ($i % 5) + 1;
+ if (%i % 100 < 1){
+   $size = "250";
+ }
+ elsif (%i % 100 < 5){
+   $size = "100";
+ }
+ elsif ($i % 100 < 20){
+   $size = "50";
+ }
+ elsif ($i % 100 < 55){
+   $size = "10";
+ }
+ else { 
+   $size = "5";
+ }
+
+ $dest = "$dir/image_$i.gif";
+ @args = ($GEN_CMD, $size, $dest);
+ system(@args) == 0
+     or die "system @args failed: $?";
+}
+
+
+

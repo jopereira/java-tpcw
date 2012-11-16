@@ -1,0 +1,46 @@
+/*-------------------------------------------------------------------------
+ * rbe.args.StringArg
+ * Timothy Heil
+ * 11/11/99
+ *
+ * String command line argument.
+ *------------------------------------------------------------------------*/
+
+package rbe.args;
+
+public class StringArg extends Arg {
+  public String s = null;
+
+  public StringArg(String arg, String name, String desc) {
+	 super(arg, name, desc, true, false);
+  }
+
+  public StringArg(String arg, String name, String desc, ArgDB db) {
+	 super(arg, name, desc, false, true, db);
+  }
+
+  public StringArg(String arg, String name, String desc, String def) {
+	 super(arg, name, desc, false, true);
+	 s = def;
+  }
+
+  public StringArg(String arg, String name, String desc, String def, 
+						 ArgDB db) {
+	 super(arg, name, desc, false, true, db);
+	 s = def;
+  }
+
+  // Customize to parse arguments.
+  protected int parseMatch(String [] args, int a)
+		 throws Arg.Exception
+  {
+	 if (a == args.length) {
+		throw new Arg.Exception("String argument missing.", a);
+	 }
+
+	 s = args[a];
+	 return(a+1);
+  }
+	
+  public String value() { return(s); }
+}

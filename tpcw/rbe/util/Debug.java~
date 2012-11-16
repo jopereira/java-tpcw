@@ -1,0 +1,37 @@
+/*-------------------------------------------------------------------------
+ * util.Debug.java
+ * Timothy Heil
+ * 10/26/98
+ * 
+ * Why is this class not part of the standard API?
+ *------------------------------------------------------------------------*/
+
+package rbe.util;
+
+public class Debug {
+  public static void assert(boolean assertCond, String message)
+  {
+    if (!assertCond) {
+      throw new DebugError("Assert failed:  " + message);
+    }
+  }
+
+  public static void fail(String message)
+  {
+    throw new DebugError("Assert failed:  " + message);
+  }
+}
+
+class DebugError extends Error {
+  String message;
+
+  public DebugError(String message)
+  {
+    this.message = message;
+  }
+
+  public String toString() 
+  {
+    return ("DebugError:  " + message);
+  }
+}
