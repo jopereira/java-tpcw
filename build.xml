@@ -159,6 +159,7 @@
     	<target name="dist" depends="build, checkDist" unless="dist.notNeeded" description="Build the *.war file from *.class files.">
 		<war destfile="${distDir}/tpcw.war" webxml="tpcw.xml">
 			<classes dir="${buildServDir}"/>	
+			<lib file="${cpJDBC}"/>
 		</war>
 		<copy todir="${distDir}" preservelastmodified="true">
 			<fileset dir="${buildDbDir}" casesensitive="yes">
