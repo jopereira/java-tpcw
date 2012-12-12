@@ -57,8 +57,16 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 
 public class TPCW_home_interaction extends HttpServlet {
-    
-  public void doGet(HttpServletRequest req, HttpServletResponse res)
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		
+		System.err.println("Loading configuration from properties files...");
+		SQL.load();
+		TPCW_Util.load();
+	}
+
+public void doGet(HttpServletRequest req, HttpServletResponse res)
     throws IOException, ServletException {
       int i;	
       String url;

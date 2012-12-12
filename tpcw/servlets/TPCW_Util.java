@@ -57,18 +57,21 @@
 
 import java.util.*;
 
-public class TPCW_Util {
+public class TPCW_Util extends Loader {
+	public static void load() {
+		load(Loader.class, "tpcw.properties", "");
+	}
     
     //public final String SESSION_ID="JIGSAW_SESSION_ID";
     //public static final String SESSION_ID="JServSessionIdroot";
-    public static final String SESSION_ID="@sessionIdString@";
+    public static final String sessionIdString="jsessionid=";
 
     //This must be equal to the number of items in the ITEM table
-    public static final int NUM_ITEMS = @num.item@;
+    public static int num_item = 1000;
 
     public static int getRandomI_ID(){
 	Random rand = new Random();
-	Double temp = new Double(Math.floor(rand.nextFloat() * NUM_ITEMS));
+	Double temp = new Double(Math.floor(rand.nextFloat() * num_item));
 	return temp.intValue();
     }
 

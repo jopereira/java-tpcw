@@ -67,15 +67,9 @@
 	<!-- Copy source files and replace tokens according to the filter files -->
 	<target name="mksrc" depends="prepare" description="Replace tokens in src with values from properties in filter files.">
 		<filter filtersFile="${tpcwFilter}"/>
-		<filter filtersFile="${sqlFilter}"/>
 		<copy todir="${srcServDir}" filtering="on" preservelastmodified="true">
 			<fileset dir="${tpcwDir}/${servDir}" casesensitive="yes">
   				<include name="**/*.java"/>
-  			</fileset>
-		</copy>
-		<copy tofile="${srcServDir}/TPCW_Database.java" filtering="on" preservelastmodified="true">
-			<fileset dir="${basedir}" casesensitive="yes">
-  				<include name="TPCW_Database.${dbName}.java"/>
   			</fileset>
 		</copy>
 		<copy todir="${srcRbeDir}" filtering="on" preservelastmodified="true">
@@ -91,6 +85,7 @@
   				<include name="populate_images"/>
   			</fileset>
 		</copy>
+		<copy file="${sqlFilter}" tofile="${srcDir}/sql.properties" preservelastmodified="true"/>
 	</target>
 
 	<!-- Build the class files for the servlets and the database populate class -->
@@ -159,6 +154,8 @@
     	<target name="dist" depends="build, checkDist" unless="dist.notNeeded" description="Build the *.war file from *.class files.">
 		<war destfile="${distDir}/tpcw.war" webxml="tpcw.xml">
 			<classes dir="${buildServDir}"/>	
+			<classes file="${tpcwFilter}"/>
+			<classes file="${srcDir}/sql.properties"/>
 		</war>
 		<copy todir="${distDir}" preservelastmodified="true">
 			<fileset dir="${buildDbDir}" casesensitive="yes">

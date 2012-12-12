@@ -65,10 +65,13 @@ import java.util.*;
 import java.sql.Date;
 import java.sql.Timestamp;
 
-public class TPCW_Database {
+public class TPCW_Database extends Loader {
+	public static void load() {
+		load(TPCW_Database.class, "tpcw.properties", "");
+	}
 
-    static String driverName = "@jdbc.driver@";
-    static String jdbcPath = "@jdbc.path@";
+    static String jdbc_driver = null;
+    static String jdbc_path = null;
     // Pool of *available* connections.
     static Vector availConn = new Vector(0);
     static int checkedOut = 0;
@@ -78,7 +81,7 @@ public class TPCW_Database {
     
     //    private static final boolean use_connection_pool = false;
     private static final boolean use_connection_pool = true;
-    public static final int maxConn = @jdbc.connPoolMax@;
+    public static final int jdbc_connPoolMax = 100;
     
     // Here's what the db line looks like for postgres
     //public static final String url = "jdbc:postgresql://eli.ece.wisc.edu/tpcwb";
@@ -110,7 +113,7 @@ public class TPCW_Database {
 		return(con);
 	    }
 	    
-	    if (maxConn == 0 || checkedOut < maxConn) {
+	    if (jdbc_connPoolMax == 0 || checkedOut < jdbc_connPoolMax) {
 		con = getNewConnection();	
 		totalConnections++;
 	    }
@@ -139,7 +142,7 @@ public class TPCW_Database {
     // Get a new connection to DB2
     public static Connection getNewConnection() {
 	try {
-	    Class.forName(driverName);
+	    Class.forName(jdbc_driver);
 	    // Class.forName("postgresql.Driver");
 
 	    // Create URL for specifying a DBMS
@@ -147,7 +150,7 @@ public class TPCW_Database {
 	    while(true) {
 		try {
 		    //   con = DriverManager.getConnection("jdbc:postgresql://eli.ece.wisc.edu/tpcw", "milo", "");
-		    con = DriverManager.getConnection(jdbcPath);
+		    con = DriverManager.getConnection(jdbc_path);
 		    break;  
 		} catch (java.sql.SQLException ex) {
 		    System.err.println("Error getting connection: " + 
@@ -177,7 +180,7 @@ public class TPCW_Database {
 	    //	    out.println("About to preparestatement!");
 	    //            out.flush();
 	    PreparedStatement get_name = con.prepareStatement
-		(@sql.getName@);
+		(SQL.getName);
 	    
 	    // Set parameter
 	    get_name.setInt(1, c_id);
@@ -206,7 +209,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getBook@);
+		(SQL.getBook);
 	    
 	    // Set parameter
 	    statement.setInt(1, i_id);
@@ -231,7 +234,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getCustomer@);
+		(SQL.getCustomer);
 	    
 	    // Set parameter
 	    statement.setString(1, UNAME);
@@ -263,7 +266,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.doSubjectSearch@);
+		(SQL.doSubjectSearch);
 	    
 	    // Set parameter
 	    statement.setString(1, search_key);
@@ -289,7 +292,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.doTitleSearch@);
+		(SQL.doTitleSearch);
 	    
 	    // Set parameter
 	    statement.setString(1, search_key+"%");
@@ -315,7 +318,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.doAuthorSearch@);
+		(SQL.doAuthorSearch);
 
 	    // Set parameter
 	    statement.setString(1, search_key+"%");
@@ -341,7 +344,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getNewProducts@);
+		(SQL.getNewProducts);
 
 	    // Set parameter
 	    statement.setString(1, subject);
@@ -368,7 +371,7 @@ public class TPCW_Database {
 	    Connection con = getConnection();
 	    //The following is the original, unoptimized best sellers query.
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getBestSellers@);
+		(SQL.getBestSellers);
 	    //This is Mikko's optimized version, which depends on the fact that
 	    //A table named "bestseller" has been created.
 	    /*PreparedStatement statement = con.prepareStatement
@@ -400,7 +403,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getRelated@);
+		(SQL.getRelated);
 
 	    // Set parameter
 	    statement.setInt(1, i_id);
@@ -429,7 +432,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.adminUpdate@);
+		(SQL.adminUpdate);
 
 	    // Set parameter
 	    statement.setDouble(1, cost);
@@ -439,7 +442,7 @@ public class TPCW_Database {
 	    statement.executeUpdate();
 	    statement.close();
 	    PreparedStatement related = con.prepareStatement
-		(@sql.adminUpdate.related@);
+		(SQL.adminUpdate_related);
 
 	    // Set parameter
 	    related.setInt(1, i_id);	
@@ -467,7 +470,7 @@ public class TPCW_Database {
 	    {
 		// Prepare SQL
 		statement = con.prepareStatement
-		    (@sql.adminUpdate.related1@);
+		    (SQL.adminUpdate_related1);
 		
 		// Set parameter
 		statement.setInt(1, related_items[0]);
@@ -492,7 +495,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement get_user_name = con.prepareStatement
-		(@sql.getUserName@);
+		(SQL.getUserName);
 	    
 	    // Set parameter
 	    get_user_name.setInt(1, C_ID);
@@ -518,7 +521,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement get_passwd = con.prepareStatement
-		(@sql.getPassword@);
+		(SQL.getPassword);
 	    
 	    // Set parameter
 	    get_passwd.setString(1, C_UNAME);
@@ -544,7 +547,7 @@ public class TPCW_Database {
 	int related1 = -1;
 	try {
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getRelated1@);
+		(SQL.getRelated1);
 	    statement.setInt(1, I_ID);
 	    ResultSet rs = statement.executeQuery();
 	    rs.next();
@@ -572,7 +575,7 @@ public class TPCW_Database {
 	    {
 		// *** Get the o_id of the most recent order for this user
 		PreparedStatement get_most_recent_order_id = con.prepareStatement
-		    (@sql.getMostRecentOrder.id@);
+		    (SQL.getMostRecentOrder_id);
 		
 		// Set parameter
 		get_most_recent_order_id.setString(1, c_uname);
@@ -595,7 +598,7 @@ public class TPCW_Database {
 	    {
 		// *** Get the order info for this o_id
 		PreparedStatement get_order = con.prepareStatement
-		    (@sql.getMostRecentOrder.order@);
+		    (SQL.getMostRecentOrder_order);
 		
 		// Set parameter
 		get_order.setInt(1, order_id);
@@ -618,7 +621,7 @@ public class TPCW_Database {
 	    {
 		// *** Get the order_lines for this o_id
 		PreparedStatement get_order_lines = con.prepareStatement
-		    (@sql.getMostRecentOrder.lines@);
+		    (SQL.getMostRecentOrder_lines);
 		
 		// Set parameter
 		get_order_lines.setInt(1, order_id);
@@ -658,7 +661,7 @@ public class TPCW_Database {
 	//while(success == false) {
 	try {
 	    PreparedStatement get_next_id = con.prepareStatement
-		(@sql.createEmptyCart@);
+		(SQL.createEmptyCart);
 	    synchronized(Cart.class) {
 		ResultSet rs = get_next_id.executeQuery();
 		rs.next();
@@ -666,7 +669,7 @@ public class TPCW_Database {
 		rs.close();
 		
 		PreparedStatement insert_cart = con.prepareStatement
-		    (@sql.createEmptyCart.insert@);
+		    (SQL.createEmptyCart_insert);
 		insert_cart.executeUpdate();
 		get_next_id.close();
 		con.commit();
@@ -708,7 +711,7 @@ public class TPCW_Database {
 	try {
 	    // Prepare SQL
 	    PreparedStatement find_entry = con.prepareStatement
-		(@sql.addItem@);
+		(SQL.addItem);
 	    
 	    // Set parameter
 	    find_entry.setInt(1, SHOPPING_ID);
@@ -721,7 +724,7 @@ public class TPCW_Database {
 		int currqty = rs.getInt("scl_qty");
 		currqty+=1;
 		PreparedStatement update_qty = con.prepareStatement
-		(@sql.addItem.update@);
+		(SQL.addItem_update);
 		update_qty.setInt(1, currqty);
 		update_qty.setInt(2, SHOPPING_ID);
 		update_qty.setInt(3, I_ID);
@@ -731,7 +734,7 @@ public class TPCW_Database {
 		
 		//Stick the item info in a new shopping_cart_line
 		PreparedStatement put_line = con.prepareStatement
-		    (@sql.addItem.put@);
+		    (SQL.addItem_put);
 		put_line.setInt(1, SHOPPING_ID);
 		put_line.setInt(2, 1);
 		put_line.setInt(3, I_ID);
@@ -757,7 +760,7 @@ public class TPCW_Database {
 		
 		if(QTY == 0) { // We need to remove the item from the cart
 		    PreparedStatement statement = con.prepareStatement
-			(@sql.refreshCart.remove@);
+			(SQL.refreshCart_remove);
 		    statement.setInt(1, SHOPPING_ID);
 		    statement.setInt(2, I_ID);
 		    statement.executeUpdate();
@@ -765,7 +768,7 @@ public class TPCW_Database {
    		} 
 		else { //we update the quantity
 		    PreparedStatement statement = con.prepareStatement
-			(@sql.refreshCart.update@);
+			(SQL.refreshCart_update);
 		    statement.setInt(1, QTY);
 		    statement.setInt(2, SHOPPING_ID);
 		    statement.setInt(3, I_ID);
@@ -786,7 +789,7 @@ public class TPCW_Database {
 	try {
 	    // Check to see if the cart is empty
 	    PreparedStatement get_cart = con.prepareStatement
-		(@sql.addRandomItemToCartIfNecessary@);
+		(SQL.addRandomItemToCartIfNecessary);
 	    get_cart.setInt(1, SHOPPING_ID);
 	    ResultSet rs = get_cart.executeQuery();
 	    rs.next();
@@ -810,7 +813,7 @@ public class TPCW_Database {
     private static void resetCartTime(Connection con, int SHOPPING_ID){
 	try {
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.resetCartTime@);
+		(SQL.resetCartTime);
 	
 	    // Set parameter
 	    statement.setInt(1, SHOPPING_ID);
@@ -839,7 +842,7 @@ public class TPCW_Database {
 	Cart mycart = null;
 	try {
 	    PreparedStatement get_cart = con.prepareStatement
-		(@sql.getCart@);
+		(SQL.getCart);
 	    get_cart.setInt(1, SHOPPING_ID);
 	    ResultSet rs = get_cart.executeQuery();
 	    mycart = new Cart(rs, c_discount);
@@ -860,7 +863,7 @@ public class TPCW_Database {
 	    // Prepare SQL
 	    Connection con = getConnection();
 	    PreparedStatement updateLogin = con.prepareStatement
-		(@sql.refreshSession@);
+		(SQL.refreshSession);
 	    
 	    // Set parameter
 	    updateLogin.setInt(1, C_ID);
@@ -889,7 +892,7 @@ public class TPCW_Database {
 	    cust.c_expiration = new Date(System.currentTimeMillis() + 
 					 7200000);//milliseconds in 2 hours
 	    PreparedStatement insert_customer_row = con.prepareStatement
-		(@sql.createNewCustomer@);
+		(SQL.createNewCustomer);
 	    insert_customer_row.setString(4,cust.c_fname);
 	    insert_customer_row.setString(5,cust.c_lname);
 	    insert_customer_row.setString(7,cust.c_phone);
@@ -913,7 +916,7 @@ public class TPCW_Database {
 					cust.addr_zip,
 					cust.co_name);
 	    PreparedStatement get_max_id = con.prepareStatement
-		(@sql.createNewCustomer.maxId@);
+		(SQL.createNewCustomer_maxId);
 	    
 	    synchronized(Customer.class) {
 		// Set parameter
@@ -1007,7 +1010,7 @@ public class TPCW_Database {
 	try {
 	    // Prepare SQL
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getCDiscount@);
+		(SQL.getCDiscount);
 	    
 	    // Set parameter
 	    statement.setInt(1, c_id);
@@ -1030,7 +1033,7 @@ public class TPCW_Database {
 	try {
 	    // Prepare SQL
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getCAddrId@);
+		(SQL.getCAddrId);
 	    
 	    // Set parameter
 	    statement.setInt(1, c_id);
@@ -1052,7 +1055,7 @@ public class TPCW_Database {
 	try {
 	    // Prepare SQL
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.getCAddr@);
+		(SQL.getCAddr);
 	    
 	    // Set parameter
 	    statement.setInt(1, c_id);
@@ -1087,7 +1090,7 @@ public class TPCW_Database {
 	try {
 	    // Prepare SQL
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.enterCCXact@);
+		(SQL.enterCCXact);
 	    
 	    // Set parameter
 	    statement.setInt(1, o_id);           // cx_o_id
@@ -1110,7 +1113,7 @@ public class TPCW_Database {
 	try {
 	    // Prepare SQL
 	    PreparedStatement statement = con.prepareStatement
-		(@sql.clearCart@);
+		(SQL.clearCart);
 	    
 	    // Set parameter
 	    statement.setInt(1, shopping_id);
@@ -1135,7 +1138,7 @@ public class TPCW_Database {
         // for will be there?
 	try {
 	    PreparedStatement get_co_id = con.prepareStatement
-		(@sql.enterAddress.id@);
+		(SQL.enterAddress_id);
 	    get_co_id.setString(1, country);
 	    ResultSet rs = get_co_id.executeQuery();
 	    rs.next();
@@ -1146,7 +1149,7 @@ public class TPCW_Database {
 	    //Get address id for this customer, possible insert row in
 	    //address table
 	    PreparedStatement match_address = con.prepareStatement
-		(@sql.enterAddress.match@);
+		(SQL.enterAddress_match);
 	    match_address.setString(1, street1);
 	    match_address.setString(2, street2);
 	    match_address.setString(3, city);
@@ -1156,7 +1159,7 @@ public class TPCW_Database {
 	    rs = match_address.executeQuery();
 	    if(!rs.next()){//We didn't match an address in the addr table
 		PreparedStatement insert_address_row = con.prepareStatement
-		    (@sql.enterAddress.insert@);
+		    (SQL.enterAddress_insert);
 		insert_address_row.setString(2, street1);
 		insert_address_row.setString(3, street2);
 		insert_address_row.setString(4, city);
@@ -1165,7 +1168,7 @@ public class TPCW_Database {
 		insert_address_row.setInt(7, addr_co_id);
 
 		PreparedStatement get_max_addr_id = con.prepareStatement
-		    (@sql.enterAddress.maxId@);
+		    (SQL.enterAddress_maxId);
 		synchronized(Address.class) {
 		    ResultSet rs2 = get_max_addr_id.executeQuery();
 		    rs2.next();
@@ -1195,7 +1198,7 @@ public class TPCW_Database {
 	// - Creates an entry in the 'orders' table 
 	try {
 	    PreparedStatement insert_row = con.prepareStatement
-		(@sql.enterOrder.insert@);
+		(SQL.enterOrder_insert);
 	    insert_row.setInt(2, customer_id);
 	    insert_row.setDouble(3, cart.SC_SUB_TOTAL);
 	    insert_row.setDouble(4, cart.SC_TOTAL);
@@ -1205,7 +1208,7 @@ public class TPCW_Database {
 	    insert_row.setInt(8, ship_addr_id);
 
 	    PreparedStatement get_max_id = con.prepareStatement
-		(@sql.enterOrder.maxId@);
+		(SQL.enterOrder_maxId);
 	    //selecting from order_line is really slow!
 	    synchronized(Order.class) {
 		ResultSet rs = get_max_id.executeQuery();
@@ -1250,7 +1253,7 @@ public class TPCW_Database {
 	int success = 0;
 	try {
 	    PreparedStatement insert_row = con.prepareStatement
-		(@sql.addOrderLine@);
+		(SQL.addOrderLine);
 	    
 	    insert_row.setInt(1, ol_id);
 	    insert_row.setInt(2, ol_o_id);
@@ -1269,7 +1272,7 @@ public class TPCW_Database {
 	int stock = 0;
 	try {
 	    PreparedStatement get_stock = con.prepareStatement
-		(@sql.getStock@);
+		(SQL.getStock);
 	    
 	    // Set parameter
 	    get_stock.setInt(1, i_id);
@@ -1289,7 +1292,7 @@ public class TPCW_Database {
     public static void setStock(Connection con, int i_id, int new_stock) {
 	try {
 	    PreparedStatement update_row = con.prepareStatement
-		(@sql.setStock@);
+		(SQL.setStock);
 	    update_row.setInt(1, new_stock);
 	    update_row.setInt(2, i_id);
 	    update_row.executeUpdate();
@@ -1306,7 +1309,7 @@ public class TPCW_Database {
 	    int id_expected = 1;
 	    //First verify customer table
 	    PreparedStatement get_ids = con.prepareStatement
-		(@sql.verifyDBConsistency.custId@);
+		(SQL.verifyDBConsistency_custId);
 	    ResultSet rs = get_ids.executeQuery();
 	    while(rs.next()){
 	        this_id = rs.getInt("c_id");
@@ -1320,7 +1323,7 @@ public class TPCW_Database {
 	    id_expected = 1;
 	    //Verify the item table
 	    get_ids = con.prepareStatement
-		(@sql.verifyDBConsistency.itemId@);
+		(SQL.verifyDBConsistency_itemId);
 	    rs = get_ids.executeQuery();
 	    while(rs.next()){
 	        this_id = rs.getInt("i_id");
@@ -1334,7 +1337,7 @@ public class TPCW_Database {
 	    id_expected = 1;
 	    //Verify the address table
 	    get_ids = con.prepareStatement
-		(@sql.verifyDBConsistency.addrId@);
+		(SQL.verifyDBConsistency_addrId);
 	    rs = get_ids.executeQuery();
 	    while(rs.next()){
 	        this_id = rs.getInt("addr_id");
