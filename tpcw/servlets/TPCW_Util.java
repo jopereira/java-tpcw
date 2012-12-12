@@ -69,7 +69,7 @@ public class TPCW_Util {
     public static int getRandomI_ID(){
 	Random rand = new Random();
 	Double temp = new Double(Math.floor(rand.nextFloat() * NUM_ITEMS));
-	return temp.intValue();
+	return temp.intValue()+1;
     }
 
     public static int getRandom(int i) {  // Returns integer 1, 2, 3 ... i
