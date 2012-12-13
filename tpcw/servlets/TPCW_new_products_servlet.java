@@ -56,6 +56,8 @@
  *
  ************************************************************************/
 
+package servlets;
+
 import java.io.*;
 import java.util.*;
 import javax.servlet.*;

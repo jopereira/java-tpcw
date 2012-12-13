@@ -52,6 +52,8 @@
  *
  ************************************************************************/
 
+package servlets;
+
 public class BuyConfirmResult {
     public Cart cart;
     public int order_id;

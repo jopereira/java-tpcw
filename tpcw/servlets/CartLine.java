@@ -53,6 +53,8 @@
  *
  ************************************************************************/
 
+package servlets;
+
 public class CartLine{
     public String scl_title;
     public double scl_cost;

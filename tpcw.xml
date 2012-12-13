@@ -22,59 +22,59 @@
 
   <servlet>
     <servlet-name>TPCW_home_interaction</servlet-name>
-    <servlet-class>TPCW_home_interaction</servlet-class>
+    <servlet-class>servlets.TPCW_home_interaction</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_shopping_cart_interaction</servlet-name>
-    <servlet-class>TPCW_shopping_cart_interaction</servlet-class>
+    <servlet-class>servlets.TPCW_shopping_cart_interaction</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_order_inquiry_servlet</servlet-name>
-    <servlet-class>TPCW_order_inquiry_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_order_inquiry_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_order_display_servlet</servlet-name>
-    <servlet-class>TPCW_order_display_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_order_display_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_search_request_servlet</servlet-name>
-    <servlet-class>TPCW_search_request_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_search_request_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_execute_search</servlet-name>
-    <servlet-class>TPCW_execute_search</servlet-class>
+    <servlet-class>servlets.TPCW_execute_search</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_new_products_servlet</servlet-name>
-    <servlet-class>TPCW_new_products_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_new_products_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_best_sellers_servlet</servlet-name>
-    <servlet-class>TPCW_best_sellers_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_best_sellers_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_product_detail_servlet</servlet-name>
-    <servlet-class>TPCW_product_detail_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_product_detail_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_customer_registration_servlet</servlet-name>
-    <servlet-class>TPCW_customer_registration_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_customer_registration_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_buy_request_servlet</servlet-name>
-    <servlet-class>TPCW_buy_request_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_buy_request_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_buy_confirm_servlet</servlet-name>
-    <servlet-class>TPCW_buy_confirm_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_buy_confirm_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_admin_request_servlet</servlet-name>
-    <servlet-class>TPCW_admin_request_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_admin_request_servlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>TPCW_admin_response_servlet</servlet-name>
-    <servlet-class>TPCW_admin_response_servlet</servlet-class>
+    <servlet-class>servlets.TPCW_admin_response_servlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

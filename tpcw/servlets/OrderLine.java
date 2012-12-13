@@ -53,6 +53,8 @@
  *
  ************************************************************************/
 
+package servlets;
+
 import java.sql.*;
 
 public class OrderLine {

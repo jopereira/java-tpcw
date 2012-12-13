@@ -52,6 +52,8 @@
  *
  ************************************************************************/
 
+package servlets;
+
 import java.util.Date;
 import java.sql.*;
 

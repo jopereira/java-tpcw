@@ -90,7 +90,7 @@
 
 	<!-- Build the class files for the servlets and the database populate class -->
   	<target name="build" depends="mksrc" description="Build the *.class files from source.">
-    		<javac srcdir="${srcServDir}" destdir="${buildServDir}">
+    		<javac srcdir="${srcDir}" destdir="${buildServDir}" includes="servlets/**">
     			<classpath>
       				<pathelement path="${classpath}"/>
       				<pathelement path="${srcServDir}"/>

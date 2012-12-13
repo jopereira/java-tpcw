@@ -14,6 +14,8 @@
 ##############################################################################
 */
 
+package servlets;
+
 public class SQL extends Loader {
 	public static void load() {
 		load(SQL.class, "sql.properties", "sql.");
