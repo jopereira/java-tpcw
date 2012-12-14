@@ -59,6 +59,8 @@ package servlets;
 
 import java.util.*;
 
+import common.Loader;
+
 public class TPCW_Util extends Loader {
 	public static void load() {
 		load(TPCW_Util.class, "tpcw.properties", "");

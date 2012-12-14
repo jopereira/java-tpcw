@@ -185,7 +185,7 @@
   
 	<!-- DB generation -->
 	<target name="gendb" depends="dist" description="Generate Database data.">
-		<java classname="TPCW_Populate" fork="true">
+		<java classname="populate.TPCW_Populate" fork="true">
          		<classpath>
       				<pathelement path="${classpath}"/>
       				<pathelement path="${srcDbDir}"/>

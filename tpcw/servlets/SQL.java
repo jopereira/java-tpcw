@@ -16,6 +16,8 @@
 
 package servlets;
 
+import common.Loader;
+
 public class SQL extends Loader {
 	public static void load() {
 		load(SQL.class, "sql.properties", "sql.");

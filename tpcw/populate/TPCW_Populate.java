@@ -62,33 +62,38 @@
 //   utility, because of the current unavailability of this utility.
 //2. Ditto for the I_TITLE field of the ITEM table.
 
+package populate;
+
 import java.io.*;
 import java.sql.*;
 import java.util.*;
 import java.lang.Math.*;
 
-class TPCW_Populate {
+import common.Loader;
+
+public class TPCW_Populate extends Loader {
     
     private static Connection con;
     private static Random rand;
     
     //These variables are dependent on the JDBC database driver used.
-    private static final String driverName = "@jdbc.driver@";
-    private static final String dbName = "@jdbc.path@";
+    private static String jdbc_driver;
+    private static String jdbc_path;
     
     //ATTENTION: The NUM_EBS and NUM_ITEMS variables are the only variables
     //that should be modified in order to rescale the DB.
-    private static final int NUM_EBS = @num.eb@;
-    private static final int NUM_ITEMS = @num.item@;
+    private static int num_eb = 10;
+    private static int num_item = 1000;
 
-    private static final int NUM_CUSTOMERS = NUM_EBS * 2880;
+    private static final int NUM_CUSTOMERS = num_eb * 2880;
     private static final int NUM_ADDRESSES = 2 * NUM_CUSTOMERS;
-    private static final int NUM_AUTHORS = (int) (.25 * NUM_ITEMS);
+    private static final int NUM_AUTHORS = (int) (.25 * num_item);
     private static final int NUM_ORDERS = (int) (.9 * NUM_CUSTOMERS);
 
     //    private static final int NUM_ADDRESSES = 10;
     public static void main(String[] args){
 	System.out.println("Beginning TPCW Database population.");
+    load(TPCW_Populate.class, "tpcw.properties", "");
 	rand = new Random();
 	getConnection();
 	deleteTables();
@@ -465,18 +470,18 @@ class TPCW_Populate {
 			      "LIMITED-EDITION"};
 	int NUM_BACKINGS = 5;
 	
-	System.out.println("Populating ITEM table with " + NUM_ITEMS + 
+	System.out.println("Populating ITEM table with " + num_item + 
 			   " items");
 	try {
 	    PreparedStatement statement = con.prepareStatement
 		("INSERT INTO item ( i_id, i_title , i_a_id, i_pub_date, i_publisher, i_subject, i_desc, i_related1, i_related2, i_related3, i_related4, i_related5, i_thumbnail, i_image, i_srp, i_cost, i_avail, i_stock, i_isbn, i_page, i_backing, i_dimensions) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	    for (int i = 1; i <= NUM_ITEMS; i++) {
+	    for (int i = 1; i <= num_item; i++) {
 		int month,day,year,maxday;
 		I_TITLE= getRandomAString(14,60);
-		if(i <= (NUM_ITEMS/4))
+		if(i <= (num_item/4))
 		    I_A_ID = i;
 		else 
-		    I_A_ID = getRandomInt(1, NUM_ITEMS/4);
+		    I_A_ID = getRandomInt(1, num_item/4);
 
 		year = getRandomInt(1930, 2000);
 		month = getRandomInt(0,11);
@@ -493,19 +498,19 @@ class TPCW_Populate {
 		I_SUBJECT = SUBJECTS[getRandomInt(0,NUM_SUBJECTS-1)];
 		I_DESC = getRandomAString(100,500);
 		
-		I_RELATED1 = getRandomInt(1, NUM_ITEMS);
+		I_RELATED1 = getRandomInt(1, num_item);
 		do {
-		    I_RELATED2 = getRandomInt(1, NUM_ITEMS);
+		    I_RELATED2 = getRandomInt(1, num_item);
 		} while(I_RELATED2 == I_RELATED1);
 		do {
-		    I_RELATED3 = getRandomInt(1, NUM_ITEMS);
+		    I_RELATED3 = getRandomInt(1, num_item);
 		} while(I_RELATED3 == I_RELATED1 || I_RELATED3 == I_RELATED2);
 		do {
-		    I_RELATED4 = getRandomInt(1, NUM_ITEMS);
+		    I_RELATED4 = getRandomInt(1, num_item);
 		} while(I_RELATED4 == I_RELATED1 || I_RELATED4 == I_RELATED2
 			|| I_RELATED4 == I_RELATED3);
 		do {
-		    I_RELATED5 = getRandomInt(1, NUM_ITEMS);
+		    I_RELATED5 = getRandomInt(1, num_item);
 		} while(I_RELATED5 == I_RELATED1 || I_RELATED5 == I_RELATED2
 			|| I_RELATED5 == I_RELATED3 ||
 			I_RELATED5 == I_RELATED4);
@@ -644,7 +649,7 @@ class TPCW_Populate {
 		for(int j = 1; j <= num_items; j++){
 		    int OL_ID = j;
 		    int OL_O_ID = i;
-		    int OL_I_ID = getRandomInt(1, NUM_ITEMS);
+		    int OL_I_ID = getRandomInt(1, num_item);
 		    int OL_QTY = getRandomInt(1, 300);
 		    double OL_DISCOUNT = (double) getRandomInt(0,30)/100;
 		    String OL_COMMENTS = getRandomAString(20,100);
@@ -691,8 +696,8 @@ class TPCW_Populate {
      
     private static void getConnection(){
 	try {
-	    Class.forName(driverName);
-	    con = DriverManager.getConnection(dbName);
+	    Class.forName(jdbc_driver);
+	    con = DriverManager.getConnection(jdbc_path);
 	    con.setAutoCommit(false);
 	}
 	catch (java.lang.Exception ex) {
