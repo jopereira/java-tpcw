@@ -156,6 +156,7 @@
 			<classes dir="${buildServDir}"/>	
 			<classes file="${tpcwFilter}"/>
 			<classes file="${srcDir}/sql.properties"/>
+			<lib file="${cpJDBC}"/>
 		</war>
 		<copy todir="${distDir}" preservelastmodified="true">
 			<fileset dir="${buildDbDir}" casesensitive="yes">
