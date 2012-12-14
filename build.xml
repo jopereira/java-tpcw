@@ -31,13 +31,12 @@
 			change the contents according to your needs -->
 		<property name="tpcwFilter" value="tpcw.properties"/>
 
-		<property name="tpcwDir" value="tpcw"/>
-		<property name="imagesGenDir" value="../${tpcwDir}/ImgGen"/>
+		<property name="imgDir" value="images"/>
 		
 		<property name="srcDir" value="src"/>
 		<property name="distDir" value="build"/>
 		<property name="buildDir" value="${distDir}/classes"/>
-		<property name="docDir" value="docs/api"/>
+		<property name="docDir" value="api"/>
   	</target>	
 
 	<!-- Build the class files for the servlets and the database populate class -->
@@ -67,7 +66,7 @@
 			</fileset>
 		</javadoc>
 
-		<war destfile="${distDir}/tpcw.war" webxml="tpcw.xml">
+		<war destfile="${distDir}/tpcw.war" webxml="web/tpcw.xml">
 			<classes dir="${buildDir}" casesensitive="yes">
   				<include name="common/**"/>
   				<include name="servlets/**"/>
@@ -98,13 +97,16 @@
 	<!-- Image generation -->
 	<target name="genimg" depends="build" description="Generate the images for the items.">
 		<copy todir="${imagesDir}">
-			<fileset dir="${tpcwDir}/images" casesensitive="yes">
+			<fileset dir="${imgDir}/static" casesensitive="yes">
   				<include name="**/*.gif"/>
   			</fileset>
 		</copy>		
-		<exec dir="${tpcwDir}/ImgGen/ImgFiles" executable="make" output="make_img-gen.txt" failonerror="true"/>
-		<exec dir="${distDir}" executable="${perlPath}" output="populate_images.txt" failonerror="true">
-  			<arg line="populate_images"/>
+		<exec dir="${imgDir}/ImgGen/ImgFiles" executable="make" failonerror="true"/>
+		<property file="${tpcwFilter}"/>
+		<exec dir="${imgDir}" executable="${perlPath}" failonerror="true">
+  			<arg value="populate_images"/>
+			<arg value="${num.item}"/>
+			<arg value="${imagesDir}"/>
 		</exec>
 	</target>
 	
@@ -112,6 +114,9 @@
 	<target name="clean" depends="init" description="Remove all generated files and directories (except installed *.war).">
    		<delete dir="${buildDir}" />
    		<delete dir="${docDir}" />
+		<exec dir="${imgDir}/ImgGen/ImgFiles" executable="make" failonerror="true">
+			<arg line="clean"/>
+		</exec>
   	</target>  
 	
 </project>

@@ -12,13 +12,13 @@ use File::Path;
 use File::Copy;
 
 #This should match the number of items stored in the database ITEM table.
-$NUM_ITEMS = @num.item@;
+$NUM_ITEMS = @ARGV[0]; # num.item
 
 #This should be the destination of where you would like the copies
 #of the image files placed.
-$DEST_DIR='@images.path@';
+$DEST_DIR=@ARGV[1]; # imagesDir 
 #$GEN_CMD='../ImgGen/ImgFiles/tpcwIMG';
-$GEN_CMD='@imagesGen.path@/ImgFiles/tpcwIMG';
+$GEN_CMD='./ImgGen/ImgFiles/tpcwIMG';
 
 #Create the directories that will store the images. 
 #for ($i = 0; $i < $NUM_ITEMS/100; $i++ ) {

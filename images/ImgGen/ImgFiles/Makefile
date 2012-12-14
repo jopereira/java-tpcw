@@ -1,7 +1,7 @@
 CC=gcc
 .SUFFIXES: .c .o .h
 LDLIBS=-lm
-VPATH=$(PWD):$(PWD)/../gd-1.7.2:$(PWD)/tpcw/ImgGen/ImgFiles:$(PWD)/tpcw/ImgGen/gd-1.7.2
+VPATH=$(PWD):$(PWD)/../gd-1.7.2:$(PWD)/images/ImgGen/ImgFiles:$(PWD)/images/ImgGen/gd-1.7.2
 IPATH=-I$(PWD)
 #CFLAGS=-O -v -xchip=ultra -xarch=v8plusa $(IPATH) -xCC
 CFLAGS=-O -v $(IPATH)
