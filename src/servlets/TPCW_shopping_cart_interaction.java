@@ -139,7 +139,7 @@ public class TPCW_shopping_cart_interaction extends HttpServlet {
 						      SHOPPING_ID);
 
 	//Display the shopping cart contents
-	out.print("<FORM ACTION=\"TPCW_shopping_cart_interaction;@sessionIdString@"+
+	out.print("<FORM ACTION=\"TPCW_shopping_cart_interaction"+TPCW_Util.sessionIdString+
 		  req.getRequestedSessionId()+"\" METHOD=\"get\">\n");
 	out.print("<CENTER><P></P><TABLE BORDER=\"0\">\n");
 	out.print("<TR><TD><B>Qty</B></TD><TD><B>Product</B></TD></TR>\n"); 

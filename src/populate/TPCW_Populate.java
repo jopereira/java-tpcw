@@ -77,13 +77,13 @@ public class TPCW_Populate extends Loader {
     private static Random rand;
     
     //These variables are dependent on the JDBC database driver used.
-    private static String jdbc_driver;
-    private static String jdbc_path;
+    public static String jdbc_driver;
+    public static String jdbc_path;
     
     //ATTENTION: The NUM_EBS and NUM_ITEMS variables are the only variables
     //that should be modified in order to rescale the DB.
-    private static int num_eb = 10;
-    private static int num_item = 1000;
+    public static int num_eb = 10;
+    public static int num_item = 1000;
 
     private static final int NUM_CUSTOMERS = num_eb * 2880;
     private static final int NUM_ADDRESSES = 2 * NUM_CUSTOMERS;
@@ -758,7 +758,7 @@ public class TPCW_Populate extends Loader {
 
 	try {
 	    PreparedStatement statement = con.prepareStatement
-		("CREATE TABLE author ( a_id int not null, a_fname varchar(20), a_lname varchar(20), a_mname varchar(20), a_dob date, a_bio @sql.bigCharType@, PRIMARY KEY(a_id))");
+		("CREATE TABLE author ( a_id int not null, a_fname varchar(20), a_lname varchar(20), a_mname varchar(20), a_dob date, a_bio varchar(500), PRIMARY KEY(a_id))");
 	    statement.executeUpdate();
 	    con.commit();
 	    System.out.println("Created table AUTHOR");
@@ -793,7 +793,7 @@ public class TPCW_Populate extends Loader {
 	}
 	try {
 	    PreparedStatement statement = con.prepareStatement
-		("CREATE TABLE customer ( c_id int not null, c_uname varchar(20), c_passwd varchar(20), c_fname varchar(17), c_lname varchar(17), c_addr_id int, c_phone varchar(18), c_email varchar(50), c_since date, c_last_login date, c_login timestamp, c_expiration timestamp, c_discount real, c_balance double precision, c_ytd_pmt double precision, c_birthdate date, c_data @sql.bigCharType@, PRIMARY KEY(c_id))");
+		("CREATE TABLE customer ( c_id int not null, c_uname varchar(20), c_passwd varchar(20), c_fname varchar(17), c_lname varchar(17), c_addr_id int, c_phone varchar(18), c_email varchar(50), c_since date, c_last_login date, c_login timestamp, c_expiration timestamp, c_discount real, c_balance double precision, c_ytd_pmt double precision, c_birthdate date, c_data varchar(500), PRIMARY KEY(c_id))");
 	    statement.executeUpdate();
 	    con.commit();
 	    System.out.println("Created table CUSTOMER");
@@ -805,7 +805,7 @@ public class TPCW_Populate extends Loader {
 
 	try {
 	    PreparedStatement statement = con.prepareStatement
-		("CREATE TABLE item ( i_id int not null, i_title varchar(60), i_a_id int, i_pub_date date, i_publisher varchar(60), i_subject varchar(60), i_desc @sql.bigCharType@, i_related1 int, i_related2 int, i_related3 int, i_related4 int, i_related5 int, i_thumbnail varchar(40), i_image varchar(40), i_srp double precision, i_cost double precision, i_avail date, i_stock int, i_isbn char(13), i_page int, i_backing varchar(15), i_dimensions varchar(25), PRIMARY KEY(i_id))");
+		("CREATE TABLE item ( i_id int not null, i_title varchar(60), i_a_id int, i_pub_date date, i_publisher varchar(60), i_subject varchar(60), i_desc varchar(500), i_related1 int, i_related2 int, i_related3 int, i_related4 int, i_related5 int, i_thumbnail varchar(40), i_image varchar(40), i_srp double precision, i_cost double precision, i_avail date, i_stock int, i_isbn char(13), i_page int, i_backing varchar(15), i_dimensions varchar(25), PRIMARY KEY(i_id))");
 	    statement.executeUpdate();
 	    con.commit();
 	    System.out.println("Created table ITEM");

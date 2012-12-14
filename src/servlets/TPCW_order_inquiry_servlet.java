@@ -83,7 +83,7 @@ public class TPCW_order_inquiry_servlet extends HttpServlet {
       out.print("<H1 ALIGN=\"center\">TPC Web Commerce Benchmark (TPC-W)</H1>\n"); 
       out.print("<H2 ALIGN=\"center\">Order Inquiry Page</H2>\n"); 
 
-      out.print("<FORM ACTION=\"TPCW_order_display_servlet;@sessionIdString@"+
+      out.print("<FORM ACTION=\"TPCW_order_display_servlet"+TPCW_Util.sessionIdString+
 		req.getRequestedSessionId()+"\" METHOD=\"get\">\n");
       out.print("<TABLE ALIGN=\"CENTER\">\n"); 
       out.print("<TR> <TD> <H4>Username:</H4></TD>\n"); 

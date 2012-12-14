@@ -100,7 +100,7 @@ public class TPCW_admin_request_servlet extends HttpServlet {
       out.print("<IMG SRC=\"../tpcw/Images/" + book.i_thumbnail +  
 		"\" ALIGN=\"RIGHT\" BORDER=\"0\">");
       out.print("<P><BR><BR></P>");
-      out.print("<FORM ACTION=\"TPCW_admin_response_servlet;@sessionIdString@"+
+      out.print("<FORM ACTION=\"TPCW_admin_response_servlet"+TPCW_Util.sessionIdString+
 		req.getRequestedSessionId()
 		+"\" METHOD=\"get\">\n");
       out.print("<INPUT NAME=\"I_ID\" TYPE=\"hidden\" VALUE=\"" + I_ID 

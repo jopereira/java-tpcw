@@ -61,6 +61,6 @@ package rbe;
 public class EBWWWTrans  extends EBTransition {
 
   public String request(EB eb, String html) {
-    return(RBE.www1);
+    return(RBE.standardUrl);
   }
 }

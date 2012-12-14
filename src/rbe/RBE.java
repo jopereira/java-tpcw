@@ -75,6 +75,8 @@ import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.NoSuchElementException;
 
+import common.Loader;
+
 import rbe.args.Arg;
 import rbe.args.ArgDB;
 import rbe.args.IntArg;
@@ -90,10 +92,12 @@ import rbe.util.CharRangeStrPattern;
 
 import rbe.util.Pad;
 
-public class RBE {
+public class RBE extends Loader {
 
   // URLs
-  public static String www1 = "@standardUrl@";
+  public static String standardUrl;
+  public static String servletUrlPath;
+  
   public static String www;
   public static String homeURL;
   public static String shopCartURL;
@@ -110,15 +114,12 @@ public class RBE {
   public static String adminReqURL;
   public static String adminConfURL;
   public static Date startTime;
-
+  
   public static final StrStrPattern yourCID = 
     new StrStrPattern("C_ID=");
   public static final StrStrPattern yourShopID = 
     new StrStrPattern("SHOPPING_ID=");
-  public static final StrStrPattern yourSessionID = 
-      //new StrStrPattern("JIGSAW-SESSION-ID=");
-      //      new StrStrPattern("JServSessionIdroot=");
-    new StrStrPattern(";@sessionIdString@");
+  public static StrStrPattern yourSessionID;
   public static final StrStrPattern endSessionID =
     new StrStrPattern("?");
 
@@ -128,8 +129,7 @@ public class RBE {
 
   public static void setURLs()
   {
-	 www = www1 + "@servletUrlPath@";
-	 String wwwTPCW = www1 + "@tpcwUrlPath@";
+	 www = standardUrl + servletUrlPath;
 	 homeURL = www+"TPCW_home_interaction";
 	 shopCartURL = www+"TPCW_shopping_cart_interaction";
 	 orderInqURL = www+"TPCW_order_inquiry_servlet";
@@ -148,10 +148,7 @@ public class RBE {
 
   // FIELD NAMES
   public static final String field_cid = "C_ID";
-    //public static final String field_sessionID = "JServSessionIdroot";
-    
-    //public static final String field_sessionID = "JIGSAW-SESSION-ID";
-  public static final String field_sessionID = ";@sessionIdString@";
+  public static String sessionIdString;
   public static final String field_shopID = "SHOPPING_ID";
   public static final String field_uname = "UNAME";
   public static final String field_passwd = "PASSWD";
@@ -234,6 +231,8 @@ public class RBE {
     new BufferedReader(new InputStreamReader(System.in));
 
   public static void main(String [] args) {
+	load(RBE.class, "tpcw.properties", "");
+	yourSessionID = new StrStrPattern(sessionIdString);
     RBE rbe = new RBE();
     EBTestFactory ebtf = new EBTestFactory();
     int i,a,num;
@@ -334,7 +333,7 @@ public class RBE {
 	 StringArg wwwArg = 
 		new StringArg("-WWW", "Base URL",
 						  "% The root URL for the TPC-W pages.",
-						  RBE.www1, db);
+						  RBE.standardUrl, db);
 	BooleanArg monArg = 
 	    new BooleanArg("-MONITOR", "Do utilization monitoring", 
 			   "% TRUE=do monitoring, FALSE=Don't do monitoring",
@@ -367,7 +366,7 @@ public class RBE {
     rbe.cidA        = custa.num;
     rbe.numItem     = item.num;
     rbe.numItemA    = itema.num;
-    RBE.www1        = wwwArg.s;
+    RBE.standardUrl        = wwwArg.s;
     RBE.getImage    = getImage.flag;
     RBE.monitor     = monArg.flag;
     RBE.incremental = incrArg.flag;

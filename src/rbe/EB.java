@@ -584,7 +584,7 @@ public class EB extends Thread {
   String addIDs(String i) {
 
     if (sessionID != null) {
-      i = rbe.addSession(i,rbe.field_sessionID, ""+sessionID);
+      i = rbe.addSession(i,rbe.sessionIdString, ""+sessionID);
     }
     
     if (cid != ID_UNKNOWN) {

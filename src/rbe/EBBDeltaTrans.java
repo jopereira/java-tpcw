@@ -83,6 +83,6 @@ public class EBBDeltaTrans extends EBTransition {
 		req = req + miscStuff.substring(0,100-req.length());
 	 }
 
-	 return(RBE.www1 + "servlet/TPCA_requestHttpServlet" + req);
+	 return(RBE.standardUrl + "servlet/TPCA_requestHttpServlet" + req);
   }
 }

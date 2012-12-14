@@ -74,8 +74,8 @@ public class TPCW_Database extends Loader {
 		load(TPCW_Database.class, "tpcw.properties", "");
 	}
 
-    static String jdbc_driver = null;
-    static String jdbc_path = null;
+    public static String jdbc_driver = null;
+    public static String jdbc_path = null;
     // Pool of *available* connections.
     static Vector availConn = new Vector(0);
     static int checkedOut = 0;

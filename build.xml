@@ -51,6 +51,16 @@
    		</javac>
 		<copy file="${sqlFilter}" tofile="${buildDir}/sql.properties" preservelastmodified="true"/>
 		<copy file="${tpcwFilter}" todir="${buildDir}/" preservelastmodified="true"/>
+
+		<war destfile="${distDir}/tpcw.war" webxml="web/tpcw.xml">
+			<classes dir="${buildDir}" casesensitive="yes">
+  				<include name="common/**"/>
+  				<include name="servlets/**"/>
+			</classes>
+			<classes file="${buildDir}/${tpcwFilter}"/>
+			<classes file="${buildDir}/sql.properties"/>
+			<lib file="${cpJDBC}"/>
+		</war>
   	</target>
   
 	<!-- Documentation -->
@@ -65,16 +75,6 @@
       				<include name="**/*.java" />
 			</fileset>
 		</javadoc>
-
-		<war destfile="${distDir}/tpcw.war" webxml="web/tpcw.xml">
-			<classes dir="${buildDir}" casesensitive="yes">
-  				<include name="common/**"/>
-  				<include name="servlets/**"/>
-			</classes>
-			<classes file="${buildDir}/${tpcwFilter}"/>
-			<classes file="${buildDir}/sql.properties"/>
-			<lib file="${cpJDBC}"/>
-		</war>
   	</target>
 
 	<!-- Installation -->
@@ -96,6 +96,7 @@
 	
 	<!-- Image generation -->
 	<target name="genimg" depends="build" description="Generate the images for the items.">
+		<mkdir dir="${imagesDir}"/>
 		<copy todir="${imagesDir}">
 			<fileset dir="${imgDir}/static" casesensitive="yes">
   				<include name="**/*.gif"/>

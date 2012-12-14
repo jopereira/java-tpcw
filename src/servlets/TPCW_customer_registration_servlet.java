@@ -94,7 +94,7 @@ public class TPCW_customer_registration_servlet extends HttpServlet {
       out.print("<IMG SRC=\"../tpcw/Images/tpclogo.gif\" " +
 		"ALIGN=\"BOTTOM\" BORDER=\"0\" WIDTH=\"288\" HEIGHT=\"67\">");
       out.print("</H1><H2 ALIGN=\"center\">Customer Registration Page</H2>\n");
-      out.print("<FORM ACTION=\"TPCW_buy_request_servlet;@sessionIdString@"+
+      out.print("<FORM ACTION=\"TPCW_buy_request_servlet"+TPCW_Util.sessionIdString+
 		req.getRequestedSessionId()+"\" METHOD=\"get\">");
       out.print("<BLOCKQUOTE><BLOCKQUOTE>\n");
       out.print("<HR><TABLE BORDER=\"0\"><TR>\n");

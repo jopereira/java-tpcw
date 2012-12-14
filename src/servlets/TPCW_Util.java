@@ -68,7 +68,7 @@ public class TPCW_Util extends Loader {
     
     //public final String SESSION_ID="JIGSAW_SESSION_ID";
     //public static final String SESSION_ID="JServSessionIdroot";
-    public static String sessionIdString="jsessionid=";
+    public static String sessionIdString;
 
     //This must be equal to the number of items in the ITEM table
     public static int num_item = 1000;

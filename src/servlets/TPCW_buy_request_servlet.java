@@ -133,7 +133,7 @@ public class TPCW_buy_request_servlet extends HttpServlet {
       Cart mycart = TPCW_Database.getCart(Integer.parseInt(SHOPPING_ID), cust.c_discount);
       
       //Print out the web page
-      out.print("<HR><FORM ACTION=\"TPCW_buy_confirm_servlet;@sessionIdString@"+
+      out.print("<HR><FORM ACTION=\"TPCW_buy_confirm_servlet"+TPCW_Util.sessionIdString+
 		req.getRequestedSessionId()+"\" METHOD=\"GET\">\n");
       out.print("<TABLE BORDER=\"0\" WIDTH=\"90%\">\n");
       out.print("<TR ALIGN=\"LEFT\" VALIGN=\"TOP\">\n");

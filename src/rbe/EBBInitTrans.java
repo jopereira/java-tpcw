@@ -61,6 +61,6 @@ package rbe;
 public class EBBInitTrans extends EBTransition {
 
   public String request(EB eb, String html) {
-	 return(RBE.www1 + "tpca/tpca.html");
+	 return(RBE.standardUrl + "tpca/tpca.html");
   }
 }
