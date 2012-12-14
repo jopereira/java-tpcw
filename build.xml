@@ -97,7 +97,7 @@
       				<pathelement location="${cpServ}"/>
     			</classpath>
     		</javac>
-    		<javac srcdir="${srcDir}" destdir="${buildRbeDir}" includes="rbe/**" source="1.3">
+    		<javac srcdir="${srcDir}" destdir="${buildRbeDir}" includes="rbe/**">
     			<classpath>
       				<pathelement path="${classpath}"/>
       				<pathelement path="${srcRbeDir}"/>

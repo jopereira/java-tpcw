@@ -80,7 +80,7 @@ public class Histogram
    |  Histogram will do this for you.
   \*------------------------------------------------------------------------*/
   {
-    Debug.assert(bins>0, "Histogram: number of bins < 0");
+    Debug.check(bins>0, "Histogram: number of bins < 0");
 
     hist = new int[bins];
     this.binSize = binSize;
@@ -104,7 +104,7 @@ public class Histogram
    |  but can be of any size.
   \*------------------------------------------------------------------------*/
   {
-    Debug.assert (bin >= 0, "Histogram.Add: bin less than 0.");
+    Debug.check(bin >= 0, "Histogram.Add: bin less than 0.");
 
     long lbin = bin;
     bin = bin / binSize;
@@ -137,7 +137,7 @@ public class Histogram
    |  non-negative, but can be of any size.  
   \*------------------------------------------------------------------------*/
   {
-    Debug.assert (bin>=0, "Histogram.Bin: bin less than 0.");
+    Debug.check(bin>=0, "Histogram.Bin: bin less than 0.");
 
     bin = bin/binSize;
     if (bin >= hist.length) bin = hist.length -1;

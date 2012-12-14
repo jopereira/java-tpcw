@@ -88,7 +88,7 @@ public class CharSetStrPattern extends AbCharStrPattern {
 
   public void set(char s, char e) {
 
-    Debug.assert(s<=e, "CharSetStrPattern.set: s must be <= to e.");
+    Debug.check(s<=e, "CharSetStrPattern.set: s must be <= to e.");
 
     int si = s>>3;
     int ei = e>>3;
@@ -124,7 +124,7 @@ public class CharSetStrPattern extends AbCharStrPattern {
 
   public void clear(char s, char e) {
 
-    Debug.assert(s<=e, "CharSetStrPattern.clear: s must be <= to e.");
+    Debug.check(s<=e, "CharSetStrPattern.clear: s must be <= to e.");
     int si = s>>3;
     int ei = e>>3;
 

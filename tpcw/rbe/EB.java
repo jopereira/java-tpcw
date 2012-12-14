@@ -132,42 +132,42 @@ public class EB extends Thread {
 
     // Make sure prob and trans are well-formed.
     s = prob.length;
-    Debug.assert(s>0, "No states in prob.");
-    Debug.assert(trans.length == s, "Number of states in prob (" + s + 
+    Debug.check(s>0, "No states in prob.");
+    Debug.check(trans.length == s, "Number of states in prob (" + s + 
 		 ") does not equal number of states in trans (" + 
 		 trans.length + ")");
 
     for (j=0;j<s;j++) {
-      Debug.assert(trans[j].length==s, "Transition matrix is not square.");
-      Debug.assert(prob[j].length==s, "Transition matrix is not square.");
+      Debug.check(trans[j].length==s, "Transition matrix is not square.");
+      Debug.check(prob[j].length==s, "Transition matrix is not square.");
 
       prev = 0;
       for (i=0;i<s;i++) {
 	if (prob[j][i]==NO_TRANS) {
-	  Debug.assert(trans[j][i] == null, "Transition method specified " + 
+	  Debug.check(trans[j][i] == null, "Transition method specified " + 
 		       "for impossible transition." + i + ", " + j + " " + trans[j][i]);
 	}
 	else {
-	  Debug.assert(prob[j][i] <= MAX_PROB, 
+	  Debug.check(prob[j][i] <= MAX_PROB, 
 		       "Transition probability for prob[" + 
 		       j + "][" + i + "] (" + prob[j][i] + 
 		       ") is larger than " + MAX_PROB);
-	  Debug.assert(prob[j][i] >= MIN_PROB, 
+	  Debug.check(prob[j][i] >= MIN_PROB, 
 		       "Transition probability for prob[" + 
 		       j + "][" + i + "] (" + prob[j][i] + 
 		       ") is less than " + MIN_PROB);
-	  Debug.assert(trans[j][i]!=null, 
+	  Debug.check(trans[j][i]!=null, 
 		       "No transition method for possible transition [" + 
 		       j +"][" +i + "]");
 
-	  Debug.assert(prob[j][i] > prev, 
+	  Debug.check(prob[j][i] > prev, 
 		       "Transition [" + j + "][" + i + "] has probability (" + 
 		       prob[j][i] + " not greater than previous " + 
 		       "probability (" + prev + ")");
 	  prev = prob[j][i];
 	}
       }
-      Debug.assert(prev==MAX_PROB, "Final probability for state [" + j + 
+      Debug.check(prev==MAX_PROB, "Final probability for state [" + j + 
 		   "] ( " + prev + ") is not " + MAX_PROB);
     }
 
@@ -312,10 +312,6 @@ public class EB extends Thread {
     }
     catch (MalformedURLException murl) {
       murl.printStackTrace();
-      return;
-    }
-    catch (IOException ioe) {
-      ioe.printStackTrace();
       return;
     }
   }
