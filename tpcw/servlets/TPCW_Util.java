@@ -61,12 +61,12 @@ import java.util.*;
 
 public class TPCW_Util extends Loader {
 	public static void load() {
-		load(Loader.class, "tpcw.properties", "");
+		load(TPCW_Util.class, "tpcw.properties", "");
 	}
     
     //public final String SESSION_ID="JIGSAW_SESSION_ID";
     //public static final String SESSION_ID="JServSessionIdroot";
-    public static final String sessionIdString="jsessionid=";
+    public static String sessionIdString="jsessionid=";
 
     //This must be equal to the number of items in the ITEM table
     public static int num_item = 1000;

@@ -83,7 +83,7 @@ public class TPCW_Database extends Loader {
     
     //    private static final boolean use_connection_pool = false;
     private static final boolean use_connection_pool = true;
-    public static final int jdbc_connPoolMax = 100;
+    public static int jdbc_connPoolMax = 100;
     
     // Here's what the db line looks like for postgres
     //public static final String url = "jdbc:postgresql://eli.ece.wisc.edu/tpcwb";

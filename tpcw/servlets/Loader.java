@@ -20,7 +20,7 @@ public class Loader {
 	 * @param prefix prefix added to variable names to get property names
 	 */
 	public static void load(Class<?> clz, String file, String prefix) {
-		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);  
+		InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(file);
 		Properties properties = new Properties();		
 		try {
 			properties.load(inputStream);
@@ -30,7 +30,7 @@ public class Loader {
 					continue;
 				String key = f.getName();
 				key=prefix+key.replace('_', '.');
-				String value = properties.getProperty(f.getName());
+				String value = properties.getProperty(key);
 				if (value == null)
 					continue;
 				if (f.getType().equals(String.class))
