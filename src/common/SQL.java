@@ -14,9 +14,8 @@
 ##############################################################################
 */
 
-package servlets;
+package common;
 
-import common.Loader;
 
 public class SQL extends Loader {
 	public static void load() {
@@ -175,4 +174,37 @@ public class SQL extends Loader {
 	public static String verifyDBConsistency_custId="SELECT c_id FROM customer";
 	public static String verifyDBConsistency_itemId="SELECT i_id FROM item";
 	public static String verifyDBConsistency_addrId="SELECT addr_id FROM address";
+
+	public static String createTables = "CREATE TABLE address ( addr_id int not null, addr_street1 varchar(40), addr_street2 varchar(40), addr_city varchar(30), addr_state varchar(20), addr_zip varchar(10), addr_co_id int, PRIMARY KEY(addr_id));"+
+			"CREATE TABLE author ( a_id int not null, a_fname varchar(20), a_lname varchar(20), a_mname varchar(20), a_dob date, a_bio varchar(500), PRIMARY KEY(a_id));"+
+			"CREATE TABLE cc_xacts ( cx_o_id int not null, cx_type varchar(10), cx_num varchar(20), cx_name varchar(30), cx_expire date, cx_auth_id char(15), cx_xact_amt double precision, cx_xact_date date, cx_co_id int, PRIMARY KEY(cx_o_id));"+
+			"CREATE TABLE country ( co_id int not null, co_name varchar(50), co_exchange double precision, co_currency varchar(18), PRIMARY KEY(co_id));"+
+			"CREATE TABLE customer ( c_id int not null, c_uname varchar(20), c_passwd varchar(20), c_fname varchar(17), c_lname varchar(17), c_addr_id int, c_phone varchar(18), c_email varchar(50), c_since date, c_last_login date, c_login timestamp, c_expiration timestamp, c_discount real, c_balance double precision, c_ytd_pmt double precision, c_birthdate date, c_data varchar(500), PRIMARY KEY(c_id));"+
+			"CREATE TABLE item ( i_id int not null, i_title varchar(60), i_a_id int, i_pub_date date, i_publisher varchar(60), i_subject varchar(60), i_desc varchar(500), i_related1 int, i_related2 int, i_related3 int, i_related4 int, i_related5 int, i_thumbnail varchar(40), i_image varchar(40), i_srp double precision, i_cost double precision, i_avail date, i_stock int, i_isbn char(13), i_page int, i_backing varchar(15), i_dimensions varchar(25), PRIMARY KEY(i_id));"+
+			"CREATE TABLE order_line ( ol_id int not null, ol_o_id int not null, ol_i_id int, ol_qty int, ol_discount double precision, ol_comments varchar(110), PRIMARY KEY(ol_id, ol_o_id));"+
+			"CREATE TABLE orders ( o_id int not null, o_c_id int, o_date date, o_sub_total double precision, o_tax double precision, o_total double precision, o_ship_type varchar(10), o_ship_date date, o_bill_addr_id int, o_ship_addr_id int, o_status varchar(15), PRIMARY KEY(o_id));"+
+			"CREATE TABLE shopping_cart ( sc_id int not null, sc_time timestamp, PRIMARY KEY(sc_id));"+
+			"CREATE TABLE shopping_cart_line ( scl_sc_id int not null, scl_qty int, scl_i_id int not null, PRIMARY KEY(scl_sc_id, scl_i_id))";
+
+    public static String populateCustomer = "INSERT INTO customer (c_id,c_uname,c_passwd,c_fname,c_lname,c_addr_id,c_phone,c_email,c_since,c_last_login,c_login,c_expiration,c_discount,c_balance,c_ytd_pmt,c_birthdate,c_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
+    public static String populateAddress = "INSERT INTO address(addr_id,addr_street1,addr_street2,addr_city,addr_state,addr_zip,addr_co_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public static String populateAuthor = "INSERT INTO author(a_id,a_fname,a_lname,a_mname,a_dob,a_bio) VALUES (?, ?, ?, ?, ?, ?)";
+    public static String populateCountry = "INSERT INTO country(co_id,co_name,co_exchange,co_currency) VALUES (?,?,?,?)";
+    public static String populateItem = "INSERT INTO item ( i_id, i_title , i_a_id, i_pub_date, i_publisher, i_subject, i_desc, i_related1, i_related2, i_related3, i_related4, i_related5, i_thumbnail, i_image, i_srp, i_cost, i_avail, i_stock, i_isbn, i_page, i_backing, i_dimensions) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static String populateOrders = "INSERT INTO orders(o_id, o_c_id, o_date, o_sub_total, o_tax, o_total, o_ship_type, o_ship_date, o_bill_addr_id, o_ship_addr_id, o_status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public static String populateOrderLine = "INSERT INTO order_line (ol_id, ol_o_id, ol_i_id, ol_qty, ol_discount, ol_comments) VALUES (?, ?, ?, ?, ?, ?)";
+    public static String populateCCXacts = "INSERT INTO cc_xacts(cx_o_id,cx_type,cx_num,cx_name,cx_expire,cx_auth_id,cx_xact_amt,cx_xact_date,cx_co_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+	public static String createIndexes = "create index address_addr_co_id on address(addr_co_id);" +
+			"create index addr_zip on address(addr_zip);" + 
+			"create index customer_c_addr_id on customer(c_addr_id);" +
+			"create index customer_c_uname on customer(c_uname);" +
+			"create index item_i_title on item(i_title);" +
+			"create index item_i_subject on item(i_subject);" +
+			"create index item_i_a_id on item(i_a_id);" +
+			"create index order_line_ol_i_id on order_line(ol_i_id);" +
+			"create index order_line_ol_o_id on order_line(ol_o_id);" +
+			"create index country_co_name on country(co_name);" +
+			"create index orders_o_c_id on orders(o_c_id);" +
+			"create index scl_i_id on shopping_cart_line(scl_i_id)";
 }

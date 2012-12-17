@@ -58,6 +58,8 @@ import java.util.*;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import common.SQL;
+
 public class TPCW_home_interaction extends HttpServlet {
 	@Override
 	public void init() throws ServletException {

@@ -68,6 +68,7 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 import common.Loader;
+import common.SQL;
 
 public class TPCW_Database extends Loader {
 	public static void load() {
