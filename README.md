@@ -1,5 +1,5 @@
 
-Working copy of Java TPC-W implementation used at U. Minho. This version
+Simplified version of Java TPC-W implementation used at U. Minho. This version
 was put together in http://gorda.di.uminho.pt and http://red.lsd.di.uminho.pt
 projects by J. Pereira, R. Vilaça, M. Araujo, and others. It was based on the
 installer at http://tpcw.deadpixel.de/ for PHARM TPC-W implementation. For
