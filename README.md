@@ -1,7 +1,8 @@
 
 Working copy of Java TPC-W implementation used at U. Minho. This version
 was put together in http://gorda.di.uminho.pt and http://red.lsd.di.uminho.pt
-projects by R. Vilaça, M. Araujo, and others.
+projects by R. Vilaça, M. Araujo, and others. The master branch includes only
+minor fixes. See branch uminho for an updated build system.
 
 Installer and customization from: http://tpcw.deadpixel.de/
 PostgreSQL changes from: http://pharm.ece.wisc.edu/tpcw/tpcw-postgresql.html
