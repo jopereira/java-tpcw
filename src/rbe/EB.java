@@ -201,10 +201,7 @@ public class EB extends Thread {
   public void run() {
     long wirt_t1;  // WIRT.T1 in TPC_W.Spec.
     long wirt_t2;  // Same as TT.T1 in TPC-W Spec.
-    long wirt;     // Web Interaction Response Time (WIRT).
     long tt=0L;    // Think Time.
-
-    wirt_t1 = System.currentTimeMillis();
 
     if (DEBUG>0) {
       System.out.println("usmd " + usmd);
@@ -217,6 +214,9 @@ public class EB extends Thread {
 	    System.out.println("EB " + name + "commiting suicide!");
 	    return;
 	}
+
+    wirt_t1 = System.currentTimeMillis();
+
 	if (nextReq!=null) {
 
 	  // Check if user session is finished.
@@ -282,9 +282,6 @@ public class EB extends Thread {
 	  // 8) Pick think time (TT), and compute absolute request time
 	  tt = thinkTime();
 
-
-	  wirt_t1 = wirt_t2 + tt;
-	
 	  if (terminate) {
 	      System.out.println("EB " + name + "commiting suicide!");
 	      return;
