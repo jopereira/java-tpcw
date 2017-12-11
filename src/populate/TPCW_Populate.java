@@ -86,15 +86,19 @@ public class TPCW_Populate extends Loader {
     public static int num_eb = 10;
     public static int num_item = 1000;
 
-    private static final int NUM_CUSTOMERS = num_eb * 2880;
-    private static final int NUM_ADDRESSES = 2 * NUM_CUSTOMERS;
-    private static final int NUM_AUTHORS = (int) (.25 * num_item);
-    private static final int NUM_ORDERS = (int) (.9 * NUM_CUSTOMERS);
+    private static int NUM_CUSTOMERS;
+    private static int NUM_ADDRESSES;
+    private static int NUM_AUTHORS;
+    private static int NUM_ORDERS;
 	//    private static final int NUM_ADDRESSES = 10;
     public static void main(String[] args){
 	System.out.println("Beginning TPCW Database population.");
     SQL.load();
     load(TPCW_Populate.class, "tpcw.properties", "");
+    NUM_CUSTOMERS = num_eb * 2880;
+    NUM_ADDRESSES = 2 * NUM_CUSTOMERS;
+    NUM_AUTHORS = (int) (.25 * num_item);
+    NUM_ORDERS = (int) (.9 * NUM_CUSTOMERS);
 	rand = new Random();
 	getConnection();
 	deleteTables();
