@@ -1,4 +1,4 @@
-/* 
+/*
  * TPCW_Database.java - Contains all of the code involved with database
  *                      accesses, including all of the JDBC calls. These
  *                      functions are called by many of the servlets.
@@ -177,11 +177,11 @@ public class TPCW_Database extends Loader {
 
     public static String[] getName(int c_id) {
 	String name[] = new String[2];
-	try {
 	    // Prepare SQL
 	    //	    out.println("About to call getConnection!");
 	    //            out.flush();
 	    Connection con = getConnection();
+		try {
 	    //	    out.println("About to preparestatement!");
 	    //            out.flush();
 	    PreparedStatement get_name = con.prepareStatement
@@ -203,16 +203,16 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return name;
     }
 
     public static Book getBook(int i_id) {
 	Book book = null;
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.getBook);
 	    
@@ -228,16 +228,16 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return book;
     }
 
     public static Customer getCustomer(String UNAME){
 	Customer cust = null;
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.getCustomer);
 	    
@@ -260,16 +260,16 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return cust;
     }
 
     public static Vector doSubjectSearch(String search_key) {
 	Vector vec = new Vector();
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.doSubjectSearch);
 	    
@@ -286,7 +286,7 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return vec;	
     }
@@ -319,9 +319,9 @@ public class TPCW_Database extends Loader {
 
     public static Vector doAuthorSearch(String search_key) {
 	Vector vec = new Vector();
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.doAuthorSearch);
 
@@ -338,16 +338,16 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return vec;	
     }
 
     public static Vector getNewProducts(String subject) {
 	Vector vec = new Vector();  // Vector of Books
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.getNewProducts);
 
@@ -364,16 +364,16 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return vec;	
     }
 
     public static Vector getBestSellers(String subject) {
 	Vector vec = new Vector();  // Vector of Books
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    //The following is the original, unoptimized best sellers query.
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.getBestSellers);
@@ -398,15 +398,15 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return vec;	
     }
 
     public static void getRelated(int i_id, Vector i_id_vec, Vector i_thumbnail_vec) {
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.getRelated);
 
@@ -428,14 +428,14 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
     }
 
     public static void adminUpdate(int i_id, double cost, String image, String thumbnail) {
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement statement = con.prepareStatement
 		(SQL.adminUpdate);
 
@@ -490,15 +490,15 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}	
     }
 
     public static String GetUserName(int C_ID){
 	String u_name = null;
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement get_user_name = con.prepareStatement
 		(SQL.getUserName);
 	    
@@ -515,16 +515,16 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return u_name;
     }
 
     public static String GetPassword(String C_UNAME){
 	String passwd = null;
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement get_passwd = con.prepareStatement
 		(SQL.getPassword);
 	    
@@ -541,7 +541,7 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return passwd;
     }
@@ -567,13 +567,13 @@ public class TPCW_Database extends Loader {
     }
 
     public static Order GetMostRecentOrder(String c_uname, Vector order_lines){
+		Connection con = getConnection();
 	try {
 	    order_lines.removeAllElements();
 	    int order_id;
 	    Order order;
 
 	    // Prepare SQL
-	    Connection con = getConnection();
 
 	    //	    System.out.println("cust_id: " + getCustomer(c_uname).c_id);
 
@@ -644,7 +644,7 @@ public class TPCW_Database extends Loader {
 	    returnConnection(con);
 	    return order;
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return null;
     }
@@ -680,7 +680,7 @@ public class TPCW_Database extends Loader {
 		rs.next();
 		SHOPPING_ID = rs.getInt(1);
 		rs.close();
-		
+
 		PreparedStatement insert_cart = con.prepareStatement
 		    (SQL.createEmptyCart_insert);
 		insert_cart.executeUpdate();
@@ -689,16 +689,16 @@ public class TPCW_Database extends Loader {
 	    //}
 	    returnConnection(con);
 	}catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return SHOPPING_ID;
     }
     
-    public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector ids, Vector quantities) {	
+    public static Cart doCart(int SHOPPING_ID, Integer I_ID, Vector ids, Vector quantities) {
 	Cart cart = null;
+		Connection con = getConnection();
 	try {
-	    Connection con = getConnection();
-	    
+
 	    if (I_ID != null) {
 		addItem(con, SHOPPING_ID, I_ID.intValue()); 
 	    }
@@ -711,7 +711,7 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return cart;
     }
@@ -839,13 +839,13 @@ public class TPCW_Database extends Loader {
 
     public static Cart getCart(int SHOPPING_ID, double c_discount) {
 	Cart mycart = null;
+		Connection con = getConnection();
 	try {
-	    Connection con = getConnection();
 	    mycart = getCart(con, SHOPPING_ID, c_discount);
 	    con.commit();
 	    returnConnection(con);
 	}catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return mycart;
     }
@@ -872,9 +872,9 @@ public class TPCW_Database extends Loader {
     //This should probably return an error code if the customer
     //doesn't exist, but ...
     public static void refreshSession(int C_ID) {
+		Connection con = getConnection();
 	try {
 	    // Prepare SQL
-	    Connection con = getConnection();
 	    PreparedStatement updateLogin = con.prepareStatement
 		(SQL.refreshSession);
 	    
@@ -886,15 +886,15 @@ public class TPCW_Database extends Loader {
 	    updateLogin.close();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
     }    
 
     public static Customer createNewCustomer(Customer cust) {
+		Connection con = getConnection();
 	try {
 	    // Get largest customer ID already in use.
-	    Connection con = getConnection();
-	    
+
 	    cust.c_discount = (int) (java.lang.Math.random() * 51);
 	    cust.c_balance =0.0;
 	    cust.c_ytd_pmt = 0.0;
@@ -962,7 +962,7 @@ public class TPCW_Database extends Loader {
 	    get_max_id.close();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return cust;
     }
@@ -978,8 +978,8 @@ public class TPCW_Database extends Loader {
 						String shipping) {
 	
 	BuyConfirmResult result = new BuyConfirmResult();
+		Connection con = getConnection();
 	try {
-	    Connection con = getConnection();
 	    double c_discount = getCDiscount(con, customer_id);
 	    result.cart = getCart(con, shopping_id, c_discount);
 	    int ship_addr_id = getCAddr(con, customer_id);
@@ -989,7 +989,7 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return result;
     }
@@ -1007,8 +1007,8 @@ public class TPCW_Database extends Loader {
 	
 	
 	BuyConfirmResult result = new BuyConfirmResult();
+		Connection con = getConnection();
 	try {
-	    Connection con = getConnection();
 	    double c_discount = getCDiscount(con, customer_id);
 	    result.cart = getCart(con, shopping_id, c_discount);
 	    int ship_addr_id = enterAddress(con, street_1, street_2, city, state, zip, country);
@@ -1018,7 +1018,7 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+		cleanup(con, ex);
 	}
 	return result;
     }
@@ -1337,8 +1337,8 @@ public class TPCW_Database extends Loader {
     }
 
     public static void verifyDBConsistency(){
+		Connection con = getConnection();
 	try {
-	    Connection con = getConnection();
 	    int this_id;
 	    int id_expected = 1;
 	    //First verify customer table
@@ -1388,8 +1388,22 @@ public class TPCW_Database extends Loader {
 	    con.commit();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
-	    ex.printStackTrace();
+	    cleanup(con, ex);
 	}
     }
+
+    private static void cleanup(Connection con, Exception ex) {
+    	try {
+			con.rollback();
+		} catch(Exception e) {
+    		// we tried...
+		}
+		try {
+			returnConnection(con);
+		} catch (SQLException e) {
+    		// we really tried...
+		}
+		ex.printStackTrace();
+	}
 }
 
