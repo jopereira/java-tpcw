@@ -667,7 +667,8 @@ public class TPCW_Database extends Loader {
 	try {
 	    PreparedStatement get_next_id = con.prepareStatement
 		(SQL.createEmptyCart);
-	    synchronized(Cart.class) {
+		// lock in database, as this doesn't work with snapshot isolation
+		//synchronized(Cart.class) {
 		ResultSet rs = get_next_id.executeQuery();
 		rs.next();
 		SHOPPING_ID = rs.getInt(1);
@@ -678,7 +679,7 @@ public class TPCW_Database extends Loader {
 		insert_cart.executeUpdate();
 		get_next_id.close();
 		con.commit();
-	    }
+	    //}
 	    returnConnection(con);
 	}catch (java.lang.Exception ex) {
 	    ex.printStackTrace();
@@ -922,8 +923,9 @@ public class TPCW_Database extends Loader {
 					cust.co_name);
 	    PreparedStatement get_max_id = con.prepareStatement
 		(SQL.createNewCustomer_maxId);
-	    
-	    synchronized(Customer.class) {
+
+	    // lock in database, as this doesn't work with snapshot isolation
+	    //synchronized(Customer.class) {
 		// Set parameter
 		ResultSet rs = get_max_id.executeQuery();
 		
@@ -943,7 +945,7 @@ public class TPCW_Database extends Loader {
 		insert_customer_row.executeUpdate();
 		con.commit();
 		insert_customer_row.close();
-	    }
+	    //}
 	    get_max_id.close();
 	    returnConnection(con);
 	} catch (java.lang.Exception ex) {
@@ -1174,7 +1176,8 @@ public class TPCW_Database extends Loader {
 
 		PreparedStatement get_max_addr_id = con.prepareStatement
 		    (SQL.enterAddress_maxId);
-		synchronized(Address.class) {
+		// lock in database, as this doesn't work with snapshot isolation
+		//synchronized(Address.class) {
 		    ResultSet rs2 = get_max_addr_id.executeQuery();
 		    rs2.next();
 		    addr_id = rs2.getInt(1)+1;
@@ -1182,7 +1185,7 @@ public class TPCW_Database extends Loader {
 		    //Need to insert a new row in the address table
 		    insert_address_row.setInt(1, addr_id);
 		    insert_address_row.executeUpdate();
-		}
+		//}
 		get_max_addr_id.close();
 		insert_address_row.close();
 	    } else { //We actually matched
@@ -1215,7 +1218,8 @@ public class TPCW_Database extends Loader {
 	    PreparedStatement get_max_id = con.prepareStatement
 		(SQL.enterOrder_maxId);
 	    //selecting from order_line is really slow!
-	    synchronized(Order.class) {
+		// lock in database, as this doesn't work with snapshot isolation
+		//synchronized(Order.class) {
 		ResultSet rs = get_max_id.executeQuery();
 		rs.next();
 		o_id = rs.getInt(1) + 1;
@@ -1223,7 +1227,7 @@ public class TPCW_Database extends Loader {
 		
 		insert_row.setInt(1, o_id);
 		insert_row.executeUpdate();
-	    }
+	    //}
 	    get_max_id.close();
 	    insert_row.close();
 	} catch (java.lang.Exception ex) {
