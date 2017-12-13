@@ -665,7 +665,14 @@ public class TPCW_Database extends Loader {
 	
 	//while(success == false) {
 	try {
-	    PreparedStatement get_next_id = con.prepareStatement
+
+		if (SQL.createEmptyCart_lock != null) {
+			PreparedStatement lock = con.prepareStatement(SQL.createEmptyCart_lock);
+			lock.execute();
+			lock.close();
+		}
+
+		PreparedStatement get_next_id = con.prepareStatement
 		(SQL.createEmptyCart);
 		// lock in database, as this doesn't work with snapshot isolation
 		//synchronized(Cart.class) {
@@ -924,7 +931,13 @@ public class TPCW_Database extends Loader {
 	    PreparedStatement get_max_id = con.prepareStatement
 		(SQL.createNewCustomer_maxId);
 
-	    // lock in database, as this doesn't work with snapshot isolation
+		if (SQL.createNewCustomer_lock != null) {
+			PreparedStatement lock = con.prepareStatement(SQL.createNewCustomer_lock);
+			lock.execute();
+			lock.close();
+		}
+
+		// lock in database, as this doesn't work with snapshot isolation
 	    //synchronized(Customer.class) {
 		// Set parameter
 		ResultSet rs = get_max_id.executeQuery();
@@ -1174,7 +1187,13 @@ public class TPCW_Database extends Loader {
 		insert_address_row.setString(6, zip);
 		insert_address_row.setInt(7, addr_co_id);
 
-		PreparedStatement get_max_addr_id = con.prepareStatement
+		if (SQL.enterAddress_lock != null) {
+			PreparedStatement lock = con.prepareStatement(SQL.enterAddress_lock);
+			lock.execute();
+			lock.close();
+		}
+
+			PreparedStatement get_max_addr_id = con.prepareStatement
 		    (SQL.enterAddress_maxId);
 		// lock in database, as this doesn't work with snapshot isolation
 		//synchronized(Address.class) {
@@ -1215,7 +1234,13 @@ public class TPCW_Database extends Loader {
 	    insert_row.setInt(7, getCAddrID(con, customer_id));
 	    insert_row.setInt(8, ship_addr_id);
 
-	    PreparedStatement get_max_id = con.prepareStatement
+	    if (SQL.enterOrder_lock != null) {
+	    	PreparedStatement lock = con.prepareStatement(SQL.enterOrder_lock);
+	    	lock.execute();
+	    	lock.close();
+		}
+
+		PreparedStatement get_max_id = con.prepareStatement
 		(SQL.enterOrder_maxId);
 	    //selecting from order_line is really slow!
 		// lock in database, as this doesn't work with snapshot isolation

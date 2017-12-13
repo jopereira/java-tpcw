@@ -110,7 +110,8 @@ public class SQL extends Loader {
 		     "WHERE ol_o_id = ? " +
 		     "AND ol_i_id = i_id";
 
-	public static String createEmptyCart="LOCK TABLE shopping_cart IN EXCLUSIVE MODE; SELECT COUNT(*) FROM shopping_cart";
+	public static String createEmptyCart_lock=null;
+	public static String createEmptyCart="SELECT COUNT(*) FROM shopping_cart";
 	public static String createEmptyCart_insert="INSERT into shopping_cart (sc_id, sc_time) " +
 		     "VALUES ((SELECT COUNT(*) FROM shopping_cart)," +
 		     "CURRENT TIMESTAMP)";
@@ -133,7 +134,8 @@ public class SQL extends Loader {
 	public static String refreshSession="UPDATE customer SET c_login = CURRENT TIMESTAMP, c_expiration = CURRENT TIMESTAMP + 2 HOURS WHERE c_id = ?";
 
 	public static String createNewCustomer="INSERT into customer (c_id, c_uname, c_passwd, c_fname, c_lname, c_addr_id, c_phone, c_email, c_since, c_last_login, c_login, c_expiration, c_discount, c_balance, c_ytd_pmt, c_birthdate, c_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-	public static String createNewCustomer_maxId="LOCK TABLE customer IN EXCLUSIVE MODE; SELECT max(c_id) FROM customer";
+	public static String createNewCustomer_lock=null;
+	public static String createNewCustomer_maxId="SELECT max(c_id) FROM customer";
 
 	public static String getCDiscount="SELECT c_discount FROM customer WHERE customer.c_id = ?";
 
@@ -156,13 +158,15 @@ public class SQL extends Loader {
 		 "AND addr_co_id = ?";
 	public static String enterAddress_insert="INSERT into address (addr_id, addr_street1, addr_street2, addr_city, addr_state, addr_zip, addr_co_id) " +
 		     "VALUES (?, ?, ?, ?, ?, ?, ?)";
-	public static String enterAddress_maxId="LOCK TABLE address IN EXCLUSIVE MODE; SELECT max(addr_id) FROM address";
+	public static String enterAddress_maxId="SELECT max(addr_id) FROM address";
+	public static String enterAddress_lock=null;
 
 	public static String enterOrder_insert="INSERT into orders (o_id, o_c_id, o_date, o_sub_total, " +
 		 "o_tax, o_total, o_ship_type, o_ship_date, " +
 		 "o_bill_addr_id, o_ship_addr_id, o_status) " +
 		 "VALUES (?, ?, CURRENT DATE, ?, 8.25, ?, ?, CURRENT DATE + ? DAYS, ?, ?, 'Pending')";
-	public static String enterOrder_maxId="LOCK TABLE orders IN EXCLUSIVE MODE; SELECT count(o_id) FROM orders";
+	public static String enterOrder_lock=null;
+	public static String enterOrder_maxId="SELECT count(o_id) FROM orders";
 
 	public static String addOrderLine="INSERT into order_line (ol_id, ol_o_id, ol_i_id, ol_qty, ol_discount, ol_comments) " +
 		 "VALUES (?, ?, ?, ?, ?, ?)";
